@@ -363,7 +363,9 @@
   .notice{margin:12px 0 0;padding:10px 12px;border-radius:8px;font-size:14px;background:var(--warn-soft);color:#7a3d06;border:1px solid #f3d3ad;white-space:pre-line}
   /* 계약별 보험: 어종이 2개 이상이면 탭으로 한 장씩 */
   .sl-bar{display:flex;align-items:center;gap:6px;margin:2px 0 8px;flex-wrap:wrap}
-  .sl-tabs{flex:1;min-width:0;visibility:hidden}
+  .sl-tabs{display:none}
+  .sl-head{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+  .sl-head .sl-bar{margin:0 0 0 auto}
   .sl-tab{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line-strong);background:#fff;border-radius:999px;padding:3px 12px;font-size:13px;font-weight:700;color:var(--sub);cursor:pointer}
   .sl-tab i{display:inline-block;width:8px;height:8px;border-radius:50%;padding:0;border:0;min-width:0;font-size:0;line-height:0}
   .sl-tab[aria-selected="true"]{background:var(--text);border-color:var(--text);color:#fff}
@@ -2156,7 +2158,8 @@ function initCtrSlider(){
       return `<button type="button" class="sl-tab" role="tab" data-sl="${i}"><i class="${st ? st.className : ''}"></i>${esc(nm)}</button>`; }).join('')}</div>
     <span class="sl-n" aria-live="polite"></span>
     <button type="button" class="sl-nav" data-sl-step="-1" aria-label="이전 계약">‹</button><button type="button" class="sl-nav" data-sl-step="1" aria-label="다음 계약">›</button>`;
-  box.before(bar);
+  const head = box.previousElementSibling;
+  if(head && head.tagName === 'H3'){ head.classList.add('sl-head'); head.append(bar); } else box.before(bar);
   const show = i => {
     i = Math.max(0, Math.min(cards.length - 1, i)); ctrSlideAt[key] = i;
     cards.forEach((c, k) => { c.hidden = k !== i; c.setAttribute('role', 'tabpanel'); });

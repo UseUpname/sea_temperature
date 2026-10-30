@@ -137,6 +137,13 @@
       document.addEventListener('DOMContentLoaded', alignFoot, {once:true});
       window.addEventListener('load', alignFoot, {once:true});
       new ResizeObserver(alignFoot).observe(side);
+      // 화면 맨 아래 문구(.foot)가 있으면 '조회' 시각을 그 줄 오른쪽 끝으로 옮겨요
+      const toFoot = () => {
+        const foot = document.querySelector('main .foot, .foot');
+        if(!foot || foot.contains(upd)) return;
+        upd.classList.remove('side-foot'); upd.classList.add('foot-time'); foot.append(upd);
+      };
+      if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', toFoot, {once:true}); else toFoot();
     }
     return;
   }

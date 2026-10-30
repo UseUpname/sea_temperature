@@ -31,6 +31,9 @@
 /* 사이드바 맨 아래 '마지막 조회' (상단 바에서 옮겨 옴) — 사이드바 높이를 화면에 맞춰 맨 아래에 붙여요 */
 .side{height:calc(100vh - var(--header-height, 64px))}
 .side #updated.side-foot,.side-foot{margin-top:auto;padding:12px 12px 4px var(--side-foot-left, 32px);font-size:12px;line-height:1.5;font-weight:400;color:rgba(255,255,255,.85);font-variant-numeric:tabular-nums}
+/* '조회' 시각을 화면 맨 아래 문구(.foot) 오른쪽 끝에 붙여요 */
+.foot{display:flow-root}
+.foot .foot-time{float:right;margin-left:16px;font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
 
 /* 알림 종 */
 .bell-wrap{position:relative}
