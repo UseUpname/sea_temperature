@@ -74,7 +74,19 @@
   .search{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px}
   .search label{font-size:13px;color:var(--sub);font-weight:700}
   .search input{flex:1;min-width:0;max-width:440px;border:1px solid var(--line-strong);border-radius:8px;padding:9px 12px;font-size:15px;background:#fff}
-  .stack{display:grid;gap:16px;grid-template-columns:minmax(0,1fr) minmax(300px,380px);align-items:start}
+  /* 고객 목록 표: 열 너비를 비율로 고정(colgroup) → 화면이 바뀌어도 열 비율이 같아요 */
+  .cust-tbl{table-layout:fixed;width:100%;min-width:640px}
+  .cust-tbl th,.cust-tbl td{padding:8px 6px;text-align:center;vertical-align:middle}
+  .cust-tbl th{font-size:12px}
+  .cust-tbl td{font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .cust-tbl td.ctrs{white-space:normal}
+  .cust-tbl .who b{font-size:13.5px}
+  .cust-tbl .who small{font-size:11.5px}
+  .cust-tbl .ctr-line{justify-content:center;flex-wrap:wrap;gap:2px 4px;margin:1px 0;font-size:12.5px;white-space:normal}
+  .cust-tbl .ins{font-size:11.5px;padding:0 6px}
+  .cust-tbl .btn.sm{padding:3px 8px;font-size:12.5px}
+  .cust-tbl .cs-ic{width:14px;height:14px;vertical-align:-2px}
+  .stack{display:grid;gap:16px;grid-template-columns:minmax(0,min(58%,900px)) minmax(380px,1fr);align-items:start}
   /* 오른쪽 과거 상담 내역: 목록을 내려도 화면에 붙어 있게 */
   .hist-panel{position:sticky;top:16px;max-height:calc(100vh - 32px);display:flex;flex-direction:column}
   .hist-list{list-style:none;overflow-y:auto;padding:4px 16px 12px}
@@ -114,6 +126,77 @@
     .stack{grid-template-columns:1fr}
     .hist-panel{position:static;max-height:none}
   }
+  /* 통화 기록 보기 (STT) 버튼 · 통화 기록 창 */
+  .hist-stt{margin-top:6px;display:inline-flex;align-items:center;gap:4px;border:1px solid #e3d8f5;background:#fcfaff;color:#6b3fb0;border-radius:999px;padding:2px 11px;font-size:12px;font-weight:700}
+  .hist-stt:hover{background:#f1ebfb;border-color:#c9b6ea}
+  .hist-stt.busy{cursor:default;color:var(--muted);background:var(--soft);border-color:var(--line)}
+  .hist-stt.fail{cursor:default;color:var(--alert);background:var(--alert-soft);border-color:#f5c2bd}
+  .hist-stt-row{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:6px}
+  .hist-stt-row .hist-stt{margin-top:0}
+  .hist-up{margin-top:6px;border:1px dashed var(--line-strong);background:#fff;color:var(--sub);border-radius:999px;padding:2px 11px;font-size:12px;font-weight:700}
+  .hist-stt-row .hist-up{margin-top:0}
+  .hist-up:hover{border-color:#c9b6ea;color:#6b3fb0}
+  dialog.call{margin:auto;border:0;border-radius:14px;width:min(980px,calc(100vw - 32px));max-height:calc(100vh - 40px);box-shadow:0 18px 48px rgba(20,30,50,.25);padding:0;overflow:hidden;color:var(--text)}
+  dialog.call::backdrop{background:rgba(22,26,34,.5)}
+  .cd{display:flex;flex-direction:column;max-height:calc(100vh - 40px)}
+  .cd-h{padding:16px 20px 12px;display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+  .cd-h h4{font-size:18px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .cd-play:disabled,.cd-stop:disabled{opacity:.45;cursor:not-allowed}
+  .cd-sub{font-size:12.5px;color:var(--muted);margin-top:2px}
+  .cd-x{border:0;background:none;font-size:20px;line-height:1;color:var(--sub);padding:4px}
+  .cd-player{display:flex;align-items:center;gap:12px;padding:10px 20px;background:var(--soft);border-top:1px solid var(--line);border-bottom:1px solid var(--line);flex-wrap:wrap}
+  .cd-play{width:36px;height:36px;border-radius:50%;border:0;background:#0b7591;color:#fff;font-size:13px;flex:none}
+  .cd-stop{border:1px solid var(--line-strong);background:#fff;border-radius:8px;padding:4px 10px;font-size:12px}
+  .cd-track{flex:1;min-width:120px;height:6px;border-radius:999px;background:#dfe3ea;overflow:hidden}
+  .cd-track i{display:block;height:100%;width:0;background:var(--accent);transition:width .3s}
+  .cd-clock{font-size:12.5px;color:var(--sub);font-variant-numeric:tabular-nums;white-space:nowrap}
+  .cd-b{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);min-height:0;flex:1;overflow:hidden}
+  .cd-col{padding:14px 18px;overflow-y:auto;min-height:0}
+  .cd-col+.cd-col{border-left:1px solid var(--line)}
+  .cd-ch{font-weight:700;font-size:13.5px;margin-bottom:10px}
+  .cd-ch small{font-weight:400;color:var(--muted);font-size:11.5px;margin-left:6px}
+  .cd-ln{display:grid;grid-template-columns:58px 1fr;gap:0 10px;padding:5px 6px;margin-bottom:4px;border-radius:8px;cursor:pointer}
+  .cd-ln:hover{background:#f6f7fa}
+  .cd-ln.now,.cd-ln.now:hover{background:#fff6c8}
+  .cd-ln .sp{grid-row:span 2;align-self:start;text-align:center;font-size:12px;font-weight:700;border-radius:6px;padding:2px 0}
+  .cd-ln .sp.s{background:var(--watch-soft);color:var(--watch)}
+  .cd-ln .sp.c{background:var(--warn-soft);color:var(--warn)}
+  .cd-ln .ts{font-size:11.5px;color:var(--muted)}
+  .cd-ln p{font-size:14px;line-height:1.6}
+  .cd-ln mark{background:#fff1b8;color:inherit;border-radius:3px;padding:0 1px}
+  .cd-sum{border:1px solid var(--line-strong);border-radius:10px;padding:12px 14px;font-weight:700;font-size:14.5px;line-height:1.6}
+  .cd-found{list-style:none;display:flex;flex-direction:column;gap:6px}
+  .cd-found li{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:8px;padding:7px 10px;font-size:14px;background:#fff}
+  .cd-found li .tx{flex:1;min-width:0}
+  .cd-found .done{font-size:12.5px;color:var(--muted);white-space:nowrap}
+  .btn.ai{background:#6b3fb0;border-color:#6b3fb0;color:#fff}
+  /* 참고사항 분류 색 */
+  .cat{display:inline-block;flex:none;font-size:12px;font-weight:700;border-radius:6px;padding:1px 8px;white-space:nowrap;background:#eef0f4;color:var(--sub)}
+  .cat-연락{background:#e3eefb;color:#1d5fb8}.cat-관심{background:#fff4c2;color:#7a5a00}.cat-경험{background:#fde4e2;color:#b42318}
+  .cat-가족{background:#dcf3e3;color:#17663a}.cat-소통{background:#eef0f4;color:var(--sub)}
+  /* 고객 한 명을 고르면: 상담 내역 | 고객 참고사항 탭 */
+  .hp-tabs{display:flex;gap:2px;margin-top:10px;margin-bottom:-11px}
+  .hp-tabs[hidden]{display:none}
+  .hp-tabs button{border:0;background:none;padding:7px 12px 9px;font-weight:700;font-size:14px;color:var(--muted);border-bottom:2px solid transparent;display:flex;gap:6px;align-items:center}
+  .hp-tabs button[aria-selected="true"]{color:var(--text);border-bottom-color:var(--text)}
+  .hp-tabs .cnt{font-size:11px;background:#eef0f4;color:var(--sub);border-radius:999px;padding:0 6px}
+  .memo-view{overflow-y:auto;padding:12px 16px 16px}
+  .memo-view[hidden]{display:none}
+  .mm-list{list-style:none;display:flex;flex-direction:column;gap:8px}
+  .mm{border:1px solid var(--line);border-radius:10px;padding:10px 12px;display:grid;grid-template-columns:auto 1fr auto;gap:3px 10px;align-items:start;background:#fff}
+  .mm .tx{font-size:14.5px;min-width:0;overflow-wrap:anywhere}
+  .mm .src{grid-column:2;font-size:12.5px;color:var(--muted)}
+  .mm .src button{border:0;background:none;padding:0;color:#6b3fb0;font-size:12.5px;font-weight:700}
+  .mm .src button:hover{text-decoration:underline}
+  .mm .del{border:0;background:none;color:var(--muted);font-size:12px;opacity:.55}
+  .mm:hover .del,.mm .del:focus-visible{opacity:1}
+  .mm.fresh{animation:mm-in .8s ease-out}
+  @keyframes mm-in{from{background:#f1ebfb}to{background:#fff}}
+  .mm-add{display:flex;gap:6px;margin-top:12px}
+  .mm-add select,.mm-add input{border:1px solid var(--line-strong);border-radius:8px;padding:6px 8px;background:#fff;font-size:13.5px}
+  .mm-add input{flex:1;min-width:0}
+  .cd-f{padding:12px 20px;border-top:1px solid var(--line);display:flex;justify-content:flex-end;gap:8px}
+  @media (max-width:900px){ dialog.call{width:100vw;max-height:100vh;border-radius:0} .cd{max-height:100vh} .cd-b{grid-template-columns:1fr;overflow-y:auto} .cd-col{overflow:visible} .cd-col+.cd-col{border-left:0;border-top:1px solid var(--line)} }
   .notice{margin:0 0 12px;padding:10px 12px;border-radius:8px;font-size:14px;background:var(--warn-soft);color:#7a3d06;border:1px solid #f3d3ad}
 
   .foot{margin-top:18px;font-size:12px;color:var(--muted);line-height:1.7}
@@ -157,10 +240,11 @@
             </div>
           </div>
           <div class="tbl-wrap">
-            <table>
+            <table class="cust-tbl">
+              <colgroup><col style="width:8%"><col style="width:19%"><col style="width:9%"><col style="width:24%"><col style="width:13%"><col style="width:9%"><col style="width:7%"><col style="width:11%"></colgroup>
               <thead><tr>
                 <th scope="col">고객</th><th scope="col">연락처</th><th scope="col">수신 동의</th><th scope="col">계약별 보험</th>
-                <th scope="col">현재 상태</th><th scope="col">최근 연락</th><th scope="col" class="num">상담</th><th scope="col"><span class="note">브리핑</span></th>
+                <th scope="col">현재 상태</th><th scope="col">최근 연락</th><th scope="col">상담</th><th scope="col"><span class="note">상세 보기</span></th>
               </tr></thead>
               <tbody id="cust-rows"></tbody>
             </table>
@@ -173,8 +257,10 @@
           <div class="list-h">
             <div class="sec-h" style="margin:0"><h3 id="h-hist">과거 상담 내역</h3><p id="hist-sub">최근 순</p></div>
             <div class="filters" id="hist-filter"></div>
+            <div class="hp-tabs" id="hp-tabs" role="tablist" hidden></div>
           </div>
           <ul class="hist-list" id="hist-rows" aria-live="polite"></ul>
+          <div class="memo-view" id="memo-view" role="tabpanel" hidden></div>
           <div class="empty" id="hist-empty" hidden>상담 내역이 없어요.</div>
           <nav class="hist-pager" id="hist-pager" aria-label="상담 내역 페이지" hidden></nav>
         </section>
@@ -189,6 +275,34 @@
 </div>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
+<input type="file" id="rec-file" accept=".mp3,.m4a,.wav,.webm,.mp4,.mpeg,.mpga,audio/*" hidden>
+
+<!-- 통화 기록 창: 통화로 진행한 상담의 STT 기록 + AI 요약 + 참고사항 후보 -->
+<dialog class="call" id="call-dlg" aria-labelledby="call-title">
+  <div class="cd">
+    <div class="cd-h">
+      <div><h4 id="call-title"></h4><div class="cd-sub" id="call-sub"></div></div>
+      <button type="button" class="cd-x" id="call-x" aria-label="닫기">✕</button>
+    </div>
+    <div class="cd-player">
+      <button type="button" class="cd-play" id="call-play" aria-label="녹음 재생">▶</button>
+      <button type="button" class="cd-stop" id="call-stop">처음부터</button>
+      <div class="cd-track"><i id="call-track"></i></div>
+      <span class="cd-clock" id="call-clock"></span>
+      <span class="note" id="call-note"></span>
+    </div>
+    <div class="cd-b">
+      <section class="cd-col"><div class="cd-ch">🎙 STT 기록<small>음성을 글로 · 화자 자동 구분 · 줄을 누르면 그 부분부터 들어요</small></div><div id="call-lines"></div></section>
+      <section class="cd-col">
+        <div class="cd-ch">✨ AI 요약<small>STT 기록으로 자동 작성 · 참고용</small></div>
+        <div class="cd-sum" id="call-sum"></div>
+        <div class="cd-ch" style="margin-top:16px">참고사항 후보<small>맞는 것만 추가하세요</small></div>
+        <ul class="cd-found" id="call-found"></ul>
+      </section>
+    </div>
+    <div class="cd-f"><button type="button" class="btn ai" id="call-addall">참고사항 모두 추가</button><button type="button" class="btn" id="call-close">닫기</button></div>
+  </div>
+</dialog>
 
 <!-- 상담 기록 삭제 확인 (평소 삭제하지 않으므로 한 번 더 확인) -->
 <dialog class="confirm" id="del-dialog" aria-labelledby="del-title">
@@ -205,39 +319,33 @@
 </dialog>
 
 <script>
-/* 서버에 연결하지 못했을 때만 보여 주는 가상 데이터. 형태는 API 응답과 같음 (원본 대시보드 판정값을 옮김) */
-const SAMPLE = {
-  customers: [
-    {"code": "A-012", "name": "김○○", "phone_masked": "010-****-1203", "sms_consent": true, "region": "통영", "contracts": [{"species": "조피볼락", "coverage": "none", "sale_text": "가능"}, {"species": "참돔", "coverage": "no_rider", "sale_text": "가능"}], "risk_stage": 2, "status": "미연락", "last_contact": null, "consult_count": 0},
-    {"code": "A-031", "name": "박○○", "phone_masked": "010-****-3318", "sms_consent": true, "region": "통영", "contracts": [{"species": "참돔", "coverage": "no_rider", "sale_text": "가능"}], "risk_stage": 2, "status": "미연락", "last_contact": "2026-05-14", "consult_count": 1},
-    {"code": "A-044", "name": "정○○", "phone_masked": "010-****-4410", "sms_consent": true, "region": "통영", "contracts": [{"species": "멍게", "coverage": "none", "sale_text": "이번 달 마감"}, {"species": "전복", "coverage": "check_exclusion", "sale": null, "sale_text": null}], "risk_stage": 2, "status": "미연락", "last_contact": "2026-03-02", "consult_count": 1},
-    {"code": "A-053", "name": "임○○", "phone_masked": "010-****-5307", "sms_consent": false, "region": "통영", "contracts": [{"species": "조피볼락", "coverage": "none", "sale_text": "가능"}], "risk_stage": 2, "status": "미연락", "last_contact": null, "consult_count": 0},
-    {"code": "A-060", "name": "배○○", "phone_masked": "010-****-6021", "sms_consent": true, "region": "통영", "contracts": [{"species": "참돔", "coverage": "none", "sale_text": "가능"}], "risk_stage": 2, "status": "상담 예약", "last_contact": "2026-10-21", "consult_count": 1},
-    {"code": "A-071", "name": "신○○", "phone_masked": "010-****-7190", "sms_consent": true, "region": "통영", "contracts": [{"species": "굴", "coverage": "none", "sale_text": "11월부터"}], "risk_stage": 2, "status": "미연락", "last_contact": null, "consult_count": 0},
-    {"code": "A-082", "name": "류○○", "phone_masked": "010-****-8236", "sms_consent": true, "region": "통영", "contracts": [{"species": "멍게", "coverage": "none", "sale_text": "이번 달 마감"}], "risk_stage": 2, "status": "문자 발송", "last_contact": "2026-10-21", "consult_count": 1},
-    {"code": "A-027", "name": "조○○", "phone_masked": "010-****-2716", "sms_consent": true, "region": "통영", "contracts": [{"species": "감성돔", "coverage": "covered", "sale": null, "sale_text": null}], "risk_stage": 2, "status": "안내 완료", "last_contact": "2026-10-21", "consult_count": 1},
-    {"code": "B-007", "name": "이○○", "phone_masked": "010-****-0727", "sms_consent": true, "region": "거제", "contracts": [{"species": "멍게", "coverage": "none", "sale_text": "이번 달 마감"}, {"species": "굴", "coverage": "none", "sale_text": "11월부터"}], "risk_stage": 1, "status": "부재·재연락", "last_contact": "2026-10-21", "consult_count": 1},
-    {"code": "B-015", "name": "강○○", "phone_masked": "010-****-1588", "sms_consent": true, "region": "거제", "contracts": [{"species": "볼락", "coverage": "none", "sale_text": "가능"}], "risk_stage": 1, "status": "미연락", "last_contact": null, "consult_count": 0},
-    {"code": "C-019", "name": "최○○", "phone_masked": "010-****-1955", "sms_consent": true, "region": "고성", "contracts": [{"species": "굴", "coverage": "none", "sale_text": "11월부터"}], "risk_stage": 1, "status": "상담 예약", "last_contact": "2026-10-20", "consult_count": 2},
-    {"code": "C-003", "name": "윤○○", "phone_masked": "010-****-0391", "sms_consent": false, "region": "고성", "contracts": [{"species": "돌돔", "coverage": "none", "sale_text": "가능"}], "risk_stage": 1, "status": "미연락", "last_contact": null, "consult_count": 0},
-    {"code": "D-021", "name": "한○○", "phone_masked": "010-****-2140", "sms_consent": true, "region": "남해", "contracts": [{"species": "전복", "coverage": "no_rider", "sale_text": "가능"}], "risk_stage": 1, "status": "부재·재연락", "last_contact": "2026-10-21", "consult_count": 1},
-    {"code": "E-008", "name": "서○○", "phone_masked": "010-****-0862", "sms_consent": true, "region": "창원", "contracts": [{"species": "오만둥이", "coverage": "none", "sale_text": "가능"}], "risk_stage": 1, "status": "미연락", "last_contact": null, "consult_count": 0},
-    {"code": "F-002", "name": "오○○", "phone_masked": "010-****-0225", "sms_consent": true, "region": "하동", "contracts": [{"species": "참돔", "coverage": "covered", "sale": null, "sale_text": null}], "risk_stage": 0, "status": "가입 완료", "last_contact": "2026-08-14", "consult_count": 2},
-  ],
-  history: [
-    {"code": "A-060", "name": "배○○", "region": "통영", "species": ["참돔"], "date": "2026-10-21", "result": "상담 예약", "memo": "통화 · 견적 요청, 10/24 14:00 방문 상담"},
-    {"code": "A-082", "name": "류○○", "region": "통영", "species": ["멍게"], "date": "2026-10-21", "result": "문자 발송", "memo": "부재 → 판매 마감 안내 문자"},
-    {"code": "A-027", "name": "조○○", "region": "통영", "species": ["감성돔"], "date": "2026-10-21", "result": "안내 완료", "memo": "통화 · 경보 시 의무(먹이 중단·선별 금지) 안내"},
-    {"code": "B-007", "name": "이○○", "region": "거제", "species": ["멍게", "굴"], "date": "2026-10-21", "result": "부재 · 다시 연락", "memo": "부재 → 10/23 재연락"},
-    {"code": "D-021", "name": "한○○", "region": "남해", "species": ["전복"], "date": "2026-10-21", "result": "부재 · 다시 연락", "memo": "부재 (2회)"},
-    {"code": "C-019", "name": "최○○", "region": "고성", "species": ["굴"], "date": "2026-10-20", "result": "상담 예약", "memo": "통화 · 11월 판매 시작 후 상담 (11/3 10:00)"},
-    {"code": "C-019", "name": "최○○", "region": "고성", "species": ["굴"], "date": "2026-09-30", "result": "부재 · 다시 연락", "memo": "부재"},
-    {"code": "F-002", "name": "오○○", "region": "하동", "species": ["참돔"], "date": "2026-08-14", "result": "가입 완료", "memo": "참돔 · 해상가두리어류 재해보험 + 고수온 특약"},
-    {"code": "F-002", "name": "오○○", "region": "하동", "species": ["참돔"], "date": "2026-08-11", "result": "상담 예약", "memo": "창구 상담 예약"},
-    {"code": "A-031", "name": "박○○", "region": "통영", "species": ["참돔"], "date": "2026-05-14", "result": "가입", "memo": "참돔 기본 보험만 가입 (창구 방문)"},
-    {"code": "A-044", "name": "정○○", "region": "통영", "species": ["전복", "멍게"], "date": "2026-03-02", "result": "가입", "memo": "해상 전복 보험 가입"},
-  ],
-};
+/* 통화 기록 (STT): 상담 내역 응답(/history)의 기록마다
+   has_stt (true면 '통화 기록 보기' 버튼) · stt_dur ('m:ss', 버튼에 표시) · time ('HH:MM') · channel ('통화'·'문자'·'방문') 를 받아요.
+   STT 본문은 버튼을 누를 때 GET {API}/logs/{log_id}/stt 로 불러와요 (응답 형식은 아래 통화 기록 창 주석). */
+const sttCache = {};
+const hasCall = h => !!(h.stt || h.has_stt);
+const callDur = h => (h.stt && h.stt.dur) || h.stt_dur || '';
+// 상담 내역 한 줄의 통화 기록 영역: 보기 · 변환 중 · 실패(다시 변환) · 녹음 올리기(전화 상담)
+const uploading = new Set();
+function sttControls(h){
+  if(h.log_id == null) return '';
+  const id = esc(h.log_id), who = `${esc(h.name)} ${esc(h.date)}`;
+  if(uploading.has(String(h.log_id)) || h.stt_status === '변환 중' || h.stt_status === '대기')
+    return '<span class="hist-stt busy" aria-live="polite">🎙 STT 변환 중…</span>';
+  if(hasCall(h))
+    return `<button type="button" class="hist-stt" data-call="${id}" aria-label="${who} 통화 기록 보기">🎙 통화 기록 보기${callDur(h) ? ' · ' + esc(callDur(h)) : ''}</button>`;
+  if(h.stt_status === '실패')
+    return `<span class="hist-stt-row"><span class="hist-stt fail">STT 실패</span><button type="button" class="hist-up" data-stt-retry="${id}">다시 변환</button><button type="button" class="hist-up" data-upload="${id}">녹음 다시 올리기</button></span>`;
+  if(h.channel === '전화' || h.channel === '통화')
+    return `<button type="button" class="hist-up" data-upload="${id}" aria-label="${who} 통화 녹음 올리기">🎙 녹음 올리기</button>`;
+  return '';
+}
+function loadStt(h){
+  if(h.stt) return Promise.resolve(h.stt);
+  const key = String(h.log_id);
+  if(!sttCache[key]) sttCache[key] = getJSON(`/logs/${encodeURIComponent(h.log_id)}/stt`).catch(e => { delete sttCache[key]; throw e; });
+  return sttCache[key];
+}
 
 const COVERAGE = {
   none:            {label:'미가입',          cls:'ins ins-none'},
@@ -282,8 +390,13 @@ function matchQ(c){
       || (digits.length >= 2 && (c.phone_masked || '').replace(/\D/g, '').includes(digits));
 }
 
+// 최근 연락: 올해면 'MM/DD', 지난해 이전이면 'YY/MM/DD' (전체 날짜는 마우스를 올리면 보여요)
+function shortDate(d){
+  const [y, m, dd] = String(d).slice(0, 10).split('-');
+  return y == new Date().getFullYear() ? `${m}/${dd}` : `${y.slice(2)}/${m}/${dd}`;
+}
 function ctrLines(c){
-  return c.contracts.map(k => `<div class="ctr-line"><b>${esc(k.species)}</b><span class="${COVERAGE[k.coverage].cls}">${COVERAGE[k.coverage].label}</span>${k.sale_text ? `<small class="${saleCls(k.sale_text)}">${esc(k.sale_text)}</small>` : ''}</div>`).join('');
+  return c.contracts.map(k => `<div class="ctr-line"><b>${esc(k.species)}</b><span class="${COVERAGE[k.coverage].cls}">${COVERAGE[k.coverage].label}</span>${k.sale_text && k.sale_text !== '가능' ? `<small class="${saleCls(k.sale_text)}">${esc(k.sale_text)}</small>` : ''}</div>`).join('');
 }
 
 function renderConsult(){
@@ -292,7 +405,7 @@ function renderConsult(){
   const custs = base.filter(matchQ);
   if(histFarm && !custs.some(c => c.code === histFarm)) histFarm = null;
   document.getElementById('q-count').textContent = q ? `${custs.length}명` : `${office} ${base.length}명`;
-  document.getElementById('cust-empty').textContent = base.length
+  document.getElementById('cust-empty').textContent = !dbMode ? '고객 목록을 불러오지 못했어요.' : base.length
     ? '검색 결과가 없어요. 고객번호나 전화번호 뒷자리, 어종으로 찾아보세요.'
     : progOnly
       ? `${office} 지역에 상담 진행 중인 고객이 없어요. '전체'를 누르면 모든 고객을 볼 수 있어요.`
@@ -314,12 +427,12 @@ function renderConsult(){
       <button type="button" class="btn sm" data-cust-page="${custPage + 1}"${custPage === customerPages ? ' disabled' : ''}>다음 ›</button>`;
   document.getElementById('cust-rows').innerHTML = custs.slice((custPage - 1) * CUST_PER_PAGE, custPage * CUST_PER_PAGE).map(c => `<tr class="pick-row" data-cust="${esc(c.code)}" tabindex="0" aria-selected="${histFarm===c.code}">
       <td class="who"><b>${esc(c.name)}</b><small>${esc(c.code)}</small></td>
-      <td>${c.phone_masked ? esc(c.phone_masked) : '–'}</td>
+      <td class="nw">${c.phone_masked ? esc(c.phone_masked) : '–'}</td>
       <td>${!c.phone_masked ? '–' : c.sms_consent ? '<span class="consent-y" title="수신 동의" aria-label="수신 동의"><svg class="cs-ic" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="5.5"/></svg></span>' : '<span class="consent-n" title="수신 미동의" aria-label="수신 미동의"><svg class="cs-ic" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"/></svg></span>'}</td>
-      <td>${ctrLines(c)}</td>
+      <td class="ctrs">${ctrLines(c)}</td>
       <td><span class="st ${STATUS_CLS[c.status] || ''}">${esc(c.status)}</span></td>
-      <td>${c.last_contact ? esc(c.last_contact) : '–'}</td>
-      <td class="num">${c.consult_count}</td>
+      <td class="nw"${c.last_contact ? ` title="${esc(c.last_contact)}"` : ''}>${c.last_contact ? esc(shortDate(c.last_contact)) : '–'}</td>
+      <td>${c.consult_count}</td>
       <td><button type="button" class="btn sm" data-open="${esc(c.code)}">열기</button></td>
     </tr>`).join('');
 
@@ -341,11 +454,13 @@ function renderConsult(){
       <span aria-current="page">${histPage} / ${pages}</span>
       <button type="button" class="btn sm" data-hist-page="${histPage + 1}"${histPage === pages ? ' disabled' : ''}>다음 ›</button>`;
   document.getElementById('hist-rows').innerHTML = items.slice((histPage - 1) * HIST_PER_PAGE, histPage * HIST_PER_PAGE).map(h => `<li class="hist-item" data-log="${esc(h.log_id)}">
-      <div class="hist-top"><span>${esc(h.date)}</span><span class="hist-right"><span class="hist-res">${esc(h.result)}</span>${h.log_id != null
+      <div class="hist-top"><span>${esc(h.date)}${h.time ? ' ' + esc(h.time) : ''}</span><span class="hist-right"><span class="hist-res">${esc(h.result)}</span>${h.log_id != null
         ? `<button type="button" class="hist-del" data-del="${esc(h.log_id)}" aria-label="${esc(h.date)} ${esc(h.name)} 상담 기록 삭제" title="이 상담 기록 삭제">삭제</button>` : ''}</span></div>
-      <div class="hist-who">${hf ? '' : `<b>${esc(h.name)}</b>`}<small>${h.species.map(esc).join(' · ')}</small></div>
+      <div class="hist-who">${hf ? '' : `<b>${esc(h.name)}</b>`}<small>${h.species.map(esc).join(' · ')}${h.channel ? ' · ' + esc(h.channel) : ''}</small></div>
       <div class="hist-memo">${esc(h.memo)}</div>
+      ${sttControls(h)}
     </li>`).join('');
+  renderPanelTabs(hf);
 }
 // 이름은 성만 보이게 가려요 (예: 박종수 → 박○○)
 const maskName = n => n ? n[0] + '○'.repeat(Math.max(1, [...n].length - 1)) : n;
@@ -356,8 +471,12 @@ async function loadMasked(){
   return [c, h];
 }
 
+// 서버가 15초 안에 답하지 않으면 '불러오는 중'에 멈춰 있지 않고 오류코드 TIMEOUT 으로 알려요
 async function getJSON(path){
-  const res = await fetch(API + path).catch(e => { throw Object.assign(e, {code:'NET'}); });
+  const ctl = new AbortController(), timer = setTimeout(() => ctl.abort(), 15000);
+  const res = await fetch(API + path, {signal:ctl.signal})
+    .catch(e => { throw Object.assign(e, {code:e.name === 'AbortError' ? 'TIMEOUT' : 'NET'}); })
+    .finally(() => clearTimeout(timer));
   if(!res.ok) throw Object.assign(new Error(`${path} HTTP ${res.status}`), {code:res.status});
   return res.json();
 }
@@ -367,23 +486,24 @@ function errCode(e){
   return e.code || (/HTTP (\d{3})/.exec(e.message) || [])[1] || 'APP';
 }
 
+const setText = (id, s) => { const el = document.getElementById(id); if(el) el.textContent = s; };
 async function load(){
   const notice = document.getElementById('notice');
   try{
     [customers, history] = await loadMasked();
     dbMode = true;
-    document.getElementById('data-mode').textContent = 'DB 연결됨';
-    document.getElementById('updated').textContent = `마지막 조회 ${Shell.lastViewed()}`;
+    setText('data-mode', 'DB 연결됨');
+    setText('updated', `마지막 조회 ${Shell.lastViewed()}`);
   }catch(e){
-    customers = structuredClone(SAMPLE.customers);
-    history = SAMPLE.history.map((h, i) => ({...h, log_id:'s' + i}));   // 가상 데이터용 기록 번호
-    dbMode = false;
+    customers = []; history = []; dbMode = false;
     notice.textContent = location.protocol === 'file:'
-      ? '⚠️ 파일로 열면 서버에 연결할 수 없어 가상 데이터를 보여 주고 있어요. http://localhost:8765/consult_status.html 로 열어 주세요.'
-      : `⚠️ 서버에 연결하지 못해 예시 데이터를 보여 드립니다. 잠시 후 새로고침해 주십시오. 오류코드: ${errCode(e)}`;
+      ? '⚠️ 파일로 열면 서버에 연결할 수 없어요. http://localhost:8765/consult_status.html 로 열어 주세요.'
+      : errCode(e) === 'TIMEOUT'
+        ? '⚠️ 서버가 응답하지 않아 고객 목록을 불러오지 못했습니다. 백엔드 창에 오류가 났는지 확인해 주십시오. 오류코드: TIMEOUT'
+        : `⚠️ 서버에 연결하지 못해 고객 목록을 불러오지 못했습니다. 잠시 후 새로고침해 주십시오. 오류코드: ${errCode(e)}`;
     notice.hidden = false;
-    document.getElementById('data-mode').textContent = '가상 데이터 · 서버 연결 실패';
-    document.getElementById('updated').textContent = '2026.10.22 (목) 06:00 기준';
+    setText('data-mode', '서버 연결 실패');
+    setText('updated', '');
   }
   document.getElementById('loading').hidden = true;
   renderConsult();
@@ -480,7 +600,7 @@ delOk.addEventListener('click', async () => {
   const li = document.querySelector(`.hist-item[data-log="${CSS.escape(String(h.log_id))}"]`);
   if(li) li.classList.add('removing');
   try{
-    if(dbMode){
+    {
       // 쓰기 요청은 백엔드 규칙상 X-CSRF-Protection: 1 헤더가 필요해요
       const res = await fetch(`${API}/logs/${encodeURIComponent(h.log_id)}`, {method:'DELETE', headers:{'X-CSRF-Protection':'1'}})
         .catch(e => { throw Object.assign(e, {code:'NET'}); });
@@ -493,11 +613,7 @@ delOk.addEventListener('click', async () => {
       [customers, history] = await loadMasked();
       toast(res.status === 404 ? '이미 지워진 기록이에요 · 목록을 새로 불러왔어요' : `${h.name} ${h.date} 상담 기록을 삭제했어요`);
       if(window.Shell) Shell.reloadNoti();   // 지운 기록의 알림도 함께 사라지게
-    }else{
-      history = history.filter(x => x !== h);
-      const c = customers.find(x => x.code === h.code), rest = history.filter(x => x.code === h.code);
-      if(c){ c.consult_count = rest.length; c.last_contact = rest[0] ? rest[0].date : null; c.status = rest[0] ? rest[0].result.replace(' · ', '·') : '미연락'; }
-      toast('가상 데이터라 이 화면에서만 지웠어요');
+      delete memoCache[h.code];               // 그 통화에서 추가한 참고사항 연결이 바뀌었을 수 있어 다시 받아요
     }
     delDialog.close();
     renderConsult();
@@ -508,6 +624,9 @@ delOk.addEventListener('click', async () => {
   }
 });
 document.getElementById('hist-rows').addEventListener('click', e => {
+  const c = e.target.closest('[data-call]'); if(c){ openCall(c.dataset.call, c); return; }
+  const up = e.target.closest('[data-upload]'); if(up){ uploadTarget = up.dataset.upload; recFile.value = ''; recFile.click(); return; }
+  const rt = e.target.closest('[data-stt-retry]'); if(rt){ runStt(rt.dataset.sttRetry, null); return; }
   const b = e.target.closest('[data-del]'); if(b) askDelete(b.dataset.del, b);
 });
 document.getElementById('hist-pager').addEventListener('click', e => {
@@ -521,6 +640,272 @@ document.getElementById('cust-pager').addEventListener('click', e => {
   custPage = Number(b.dataset.custPage);
   renderConsult();
 });
+
+/* ===== 서버 쓰기 요청 (백엔드 규칙상 X-CSRF-Protection: 1 헤더가 필요해요) ===== */
+async function sendJSON(method, path, body){
+  const res = await fetch(API + path, {method, headers:{'Content-Type':'application/json', 'X-CSRF-Protection':'1'}, body:body == null ? undefined : JSON.stringify(body)})
+    .catch(e => { throw Object.assign(e, {code:'NET'}); });
+  if(!res.ok){
+    let msg = `${path} HTTP ${res.status}`;
+    try{ const j = await res.json(); if(j.detail) msg += ' · ' + (typeof j.detail === 'string' ? j.detail : JSON.stringify(j.detail)); }catch(e){}
+    throw Object.assign(new Error(msg), {code:res.status});
+  }
+  return res.status === 204 ? null : res.json().catch(() => null);
+}
+const atText = at => String(at || '').replace('T', ' ').slice(5, 16).replace('-', '/');   // 'YYYY-MM-DD HH:MM' → 'MM/DD HH:MM'
+
+/* ===== 통화 기록 창 (녹음 듣기 + STT + AI 요약 + 참고사항 후보) =====
+   GET {API}/logs/{log_id}/stt → {dur, staff_name, audio_url, summary, lines:[[화자, 'm:ss', 말]], found:[{cat, txt}]}
+     화자 's' = 상담원 · 'c' = 어민 · 말 안의 [[ ]] = 중요한 말 강조 · cat = 연락 · 관심 · 경험 · 가족 · 소통
+   audio_url 이 있으면 녹음 파일을 재생하고 STT 줄을 시간에 맞춰 강조해요.
+   없으면 브라우저 음성 합성으로 대화를 읽어 줘요 (상담원·어민 목소리 높낮이를 다르게). */
+const callDlg = document.getElementById('call-dlg');
+const $c = id => document.getElementById(id);
+const secs = ts => { const [m, s] = String(ts).split(':').map(Number); return (m || 0) * 60 + (s || 0); };
+const synth = window.speechSynthesis;
+const audio = new Audio();
+let curCall = null, curHist = null, callIdx = 0, playing = false, callReturn = null, fallbackT = null, callReq = 0;
+
+async function openCall(logId, opener){
+  const h = history.find(x => String(x.log_id) === String(logId)); if(!h) return;
+  const req = ++callReq;
+  curHist = h; curCall = null; callIdx = 0; callReturn = opener;
+  stopPlay();
+  $c('call-title').textContent = `${h.name} · ${h.species[0] || ''} 상담 통화`;
+  $c('call-sub').textContent = callSubText(h, null);
+  $c('call-lines').innerHTML = '<p class="note">통화 기록을 불러오는 중…</p>';
+  $c('call-sum').textContent = ''; $c('call-found').innerHTML = '';
+  $c('call-addall').disabled = true; $c('call-play').disabled = true; $c('call-stop').disabled = true;
+  $c('call-clock').textContent = ''; $c('call-note').textContent = ''; $c('call-track').style.width = '0';
+  if(!callDlg.open) callDlg.showModal();
+  try{
+    const [k] = await Promise.all([loadStt(h), loadMemos(h.code).catch(() => null)]);
+    if(req !== callReq || !callDlg.open) return;
+    curCall = k;
+    $c('call-sub').textContent = callSubText(h, k);
+    $c('call-lines').innerHTML = (k.lines || []).map(([w, ts, x], i) => `<div class="cd-ln" data-li="${i}" title="이 부분부터 듣기"><span class="sp ${w === 's' ? 's' : 'c'}">${w === 's' ? '상담원' : '어민'}</span><span class="ts">${esc(ts)}</span><p>${esc(x).replace(/\[\[(.+?)\]\]/g, '<mark>$1</mark>')}</p></div>`).join('')
+      || '<p class="note">STT 기록이 비어 있어요.</p>';
+    $c('call-sum').textContent = k.summary || 'AI 요약이 아직 없어요.';
+    $c('call-note').textContent = k.audio_url ? '' : synth ? '녹음 파일이 없어 음성 합성으로 들려줘요' : '이 브라우저는 소리 재생을 지원하지 않아 글 강조만 움직여요';
+    if(k.audio_url) audio.src = new URL(k.audio_url, API).href; else audio.removeAttribute('src');
+    $c('call-play').disabled = !(k.lines || []).length; $c('call-stop').disabled = false;
+    renderFound(); showLine(-1);
+    callDlg.querySelectorAll('.cd-col').forEach(el => { el.scrollTop = 0; });
+    $c('call-play').focus();
+  }catch(e){
+    if(req !== callReq) return;
+    $c('call-lines').innerHTML = `<p class="note">통화 기록을 불러오지 못했어요. 잠시 후 다시 시도해 주십시오. 오류코드: ${esc(errCode(e))}</p>`;
+  }
+}
+function callSubText(h, k){
+  const staff = (k && k.staff_name) || h.staff_name;
+  return [`${h.date}${h.time ? ' ' + h.time : ''}`, h.region, staff && `상담자 ${staff}`, `결과 ${h.result}`, (k && k.dur || callDur(h)) && `통화 ${(k && k.dur) || callDur(h)}`].filter(Boolean).join(' · ');
+}
+function showLine(i){
+  const k = curCall; if(!k) return;
+  callDlg.querySelectorAll('.cd-ln').forEach(el => el.classList.toggle('now', +el.dataset.li === i));
+  if(i >= 0) callDlg.querySelector(`.cd-ln[data-li="${i}"]`)?.scrollIntoView({block:'nearest'});
+  const total = secs(k.dur) || 1;
+  $c('call-track').style.width = i < 0 ? '0' : `${Math.min(100, secs(k.lines[i][1]) / total * 100)}%`;
+  $c('call-clock').textContent = `${i < 0 ? '0:00' : k.lines[i][1]} / ${k.dur || '–'}`;
+}
+// 녹음 파일 재생: 재생 위치에 맞는 STT 줄을 강조
+audio.addEventListener('timeupdate', () => {
+  if(!curCall || !playing) return;
+  const t = audio.currentTime; let i = -1;
+  curCall.lines.forEach(([, ts], j) => { if(secs(ts) <= t) i = j; });
+  if(i !== callIdx){ callIdx = i; showLine(i); }
+});
+audio.addEventListener('ended', () => { stopPlay(); showLine(curCall.lines.length - 1); $c('call-track').style.width = '100%'; });
+const voiceKo = () => (synth?.getVoices() || []).find(v => v.lang && v.lang.startsWith('ko'));
+function speakFrom(i){
+  const k = curCall;
+  if(i >= k.lines.length){ stopPlay(); showLine(k.lines.length - 1); $c('call-track').style.width = '100%'; return; }
+  callIdx = i; showLine(i);
+  const [w, , x] = k.lines[i], text = x.replace(/\[\[|\]\]/g, '');
+  if(!synth){ fallbackT = setTimeout(() => playing && speakFrom(i + 1), 1500); return; }
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'ko-KR'; const v = voiceKo(); if(v) u.voice = v;
+  u.pitch = w === 's' ? 1.25 : 0.7; u.rate = w === 's' ? 1.05 : 0.9;
+  u.onend = () => { if(playing) speakFrom(i + 1); };
+  synth.speak(u);
+}
+function startPlay(from){
+  if(!curCall) return;
+  synth?.cancel(); clearTimeout(fallbackT); playing = true;
+  $c('call-play').textContent = '❚❚'; $c('call-play').setAttribute('aria-label', '일시 정지');
+  if(curCall.audio_url){ audio.currentTime = from > 0 ? secs(curCall.lines[from][1]) : 0; callIdx = from; showLine(from); audio.play().catch(() => stopPlay()); }
+  else speakFrom(from);
+}
+function stopPlay(){
+  playing = false; synth?.cancel(); clearTimeout(fallbackT); audio.pause();
+  $c('call-play').textContent = '▶'; $c('call-play').setAttribute('aria-label', '녹음 재생');
+}
+$c('call-play').onclick = () => playing ? stopPlay() : startPlay(callIdx < 0 || callIdx >= curCall.lines.length - 1 ? 0 : callIdx);
+$c('call-stop').onclick = () => { stopPlay(); callIdx = 0; audio.currentTime = 0; showLine(-1); };
+$c('call-lines').addEventListener('click', e => { const l = e.target.closest('[data-li]'); if(l) startPlay(+l.dataset.li); });
+
+// 참고사항 후보: AI가 통화에서 뽑은 것 · 맞는 것만 고객 참고사항에 추가
+function renderFound(){
+  const list = curCall.found || [], have = (memoCache[curHist.code] || {}).list || [];
+  const added = f => have.some(m => m.txt === f.txt);
+  $c('call-found').innerHTML = list.map((f, j) => `<li><span class="cat cat-${esc(f.cat)}">${esc(f.cat)}</span><span class="tx">${esc(f.txt)}</span>${added(f) ? '<span class="done">추가됨</span>' : `<button type="button" class="btn sm" data-f="${j}">추가</button>`}</li>`).join('')
+    || '<li><span class="note">이 통화에서 찾은 참고사항이 없어요.</span></li>';
+  $c('call-addall').disabled = !list.some(f => !added(f));
+}
+async function addFound(list){
+  const h = curHist, have = (memoCache[h.code] || {}).list || [];
+  const todo = list.filter(f => !have.some(m => m.txt === f.txt));
+  for(const f of todo) await createMemo(h.code, {cat:f.cat, txt:f.txt, src:'stt', log_id:h.log_id});
+  return todo.length;
+}
+$c('call-found').addEventListener('click', async e => {
+  const b = e.target.closest('[data-f]'); if(!b || b.disabled) return;
+  b.disabled = true;
+  try{ await addFound([curCall.found[+b.dataset.f]]); toast('고객 참고사항에 추가했어요'); }
+  catch(err){ toast(`추가하지 못했습니다. 오류코드: ${errCode(err)}`); }
+  renderFound(); renderConsult();
+});
+$c('call-addall').onclick = async () => {
+  const b = $c('call-addall'); b.disabled = true;
+  try{ const n = await addFound(curCall.found || []); toast(`참고사항 ${n}개를 추가했어요`); }
+  catch(err){ toast(`일부를 추가하지 못했습니다. 오류코드: ${errCode(err)}`); }
+  renderFound(); renderConsult();
+};
+const closeCall = () => callDlg.close();
+$c('call-x').onclick = closeCall; $c('call-close').onclick = closeCall;
+callDlg.addEventListener('click', e => { if(e.target === callDlg) closeCall(); });   // 바깥(어두운 곳)을 누르면 닫기
+callDlg.addEventListener('close', () => { callReq++; stopPlay(); if(callReturn && document.contains(callReturn)) callReturn.focus(); callReturn = null; });
+
+/* ===== 고객 참고사항 (고객 한 명을 골랐을 때만 보이는 탭) =====
+   GET    {API}/customers/{code}/memos → [{memo_id, cat, txt, src:'stt'|'staff', log_id, at:'YYYY-MM-DD HH:MM'}] (최근 순)
+   POST   {API}/customers/{code}/memos  {cat, txt, src, log_id} → 만든 참고사항
+   DELETE {API}/memos/{memo_id}
+   src 'stt' = 통화 창의 참고사항 후보에서 추가 (log_id = 그 통화) · 'staff' = 직원이 직접 입력 */
+const memoCache = {};   // 고객 code → {state:'loading'|'ok'|'err', list, err, p}
+let panelTab = 'hist';
+function loadMemos(code, force){
+  const m = memoCache[code];
+  if(m && !force && (m.state === 'ok' || m.state === 'loading')) return m.p;
+  const entry = memoCache[code] = {state:'loading', list:m ? m.list : null};
+  entry.p = getJSON(`/customers/${encodeURIComponent(code)}/memos`)
+    .then(list => { entry.state = 'ok'; entry.list = list; return list; })
+    .catch(e => { entry.state = 'err'; entry.err = e; throw e; });
+  return entry.p;
+}
+async function createMemo(code, body){
+  const memo = await sendJSON('POST', `/customers/${encodeURIComponent(code)}/memos`, body);
+  const entry = memoCache[code];
+  if(memo && entry && entry.state === 'ok') entry.list.unshift({...memo, fresh:true});
+  else await loadMemos(code, true).catch(() => {});
+  const c = customers.find(x => x.code === code); if(c && c.memo_count != null) c.memo_count++;
+  return memo;
+}
+function memoHtml(c){
+  const m = memoCache[c.code];
+  if(!m || m.state === 'loading') return '<p class="note" style="padding:8px 2px">참고사항을 불러오는 중…</p>';
+  if(m.state === 'err') return `<p class="note" style="padding:8px 2px">참고사항을 불러오지 못했어요. 오류코드: ${esc(errCode(m.err))} <button type="button" class="btn sm" data-memo-retry>다시 시도</button></p>`;
+  const items = m.list.map(x => `<li class="mm${x.fresh ? ' fresh' : ''}"><span class="cat cat-${esc(x.cat)}">${esc(x.cat)}</span><span class="tx">${esc(x.txt)}</span>
+      <button type="button" class="del" data-memo-del="${esc(x.memo_id)}" aria-label="참고사항 삭제" title="삭제">✕</button>
+      <span class="src">${atText(x.at)} · ${x.src === 'stt' && x.log_id != null && history.some(h => String(h.log_id) === String(x.log_id))
+        ? `<button type="button" data-call="${esc(x.log_id)}" title="이 내용이 나온 통화 기록 열기">통화 요약(STT)</button>` : x.src === 'stt' ? '통화 요약(STT)' : '직원 입력'}</span></li>`).join('');
+  m.list.forEach(x => delete x.fresh);
+  return `${items ? `<ul class="mm-list">${items}</ul>` : '<p class="note" style="padding:6px 2px 2px">아직 참고사항이 없어요. 통화 기록 창의 \'참고사항 후보\'에서 추가하거나 아래에 직접 적어 주세요.</p>'}
+    <div class="mm-add">
+      <select id="mm-cat" aria-label="분류"><option>연락</option><option>관심</option><option>경험</option><option>가족</option><option>소통</option></select>
+      <input id="mm-txt" type="text" maxlength="200" placeholder="직접 적기 (예: 오후엔 바다에 계심)" aria-label="참고사항 직접 적기">
+      <button type="button" class="btn sm" data-memo-add>추가</button>
+    </div>`;
+}
+function renderPanelTabs(hf){
+  const tabs = document.getElementById('hp-tabs'), view = document.getElementById('memo-view'), rows = document.getElementById('hist-rows');
+  if(!hf){ panelTab = 'hist'; tabs.hidden = true; view.hidden = true; rows.hidden = false; return; }
+  const m = memoCache[hf.code], nHist = history.filter(h => h.code === hf.code).length;
+  const nMemo = m && m.state === 'ok' ? m.list.length : hf.memo_count;
+  tabs.hidden = false;
+  tabs.innerHTML = `<button type="button" role="tab" data-ptab="hist" aria-selected="${panelTab === 'hist'}">상담 내역 <span class="cnt">${nHist}</span></button>
+    <button type="button" role="tab" data-ptab="memo" aria-selected="${panelTab === 'memo'}">고객 참고사항${nMemo != null ? ` <span class="cnt">${nMemo}</span>` : ''}</button>`;
+  const memo = panelTab === 'memo';
+  rows.hidden = memo; view.hidden = !memo;
+  if(memo){
+    document.getElementById('hist-empty').hidden = true;
+    document.getElementById('hist-pager').hidden = true;
+    document.getElementById('hist-sub').textContent = `${hf.name} (${hf.code})${nMemo != null ? ` · 참고사항 ${nMemo}개` : ''} · 최근 순`;
+    view.innerHTML = memoHtml(hf);
+  }
+  if(!m) loadMemos(hf.code).catch(() => {}).finally(() => { if(histFarm === hf.code) renderConsult(); });   // 고르면 미리 불러와 숫자를 보여 줘요
+}
+document.getElementById('hp-tabs').addEventListener('click', e => {
+  const b = e.target.closest('[data-ptab]'); if(!b) return;
+  panelTab = b.dataset.ptab; renderConsult();
+  document.getElementById(panelTab === 'memo' ? 'memo-view' : 'hist-rows').scrollTop = 0;
+});
+const memoEl = document.getElementById('memo-view');
+async function addStaffMemo(btn){
+  const inp = document.getElementById('mm-txt'), txt = inp && inp.value.trim(); if(!txt || !histFarm) return;
+  if(btn) btn.disabled = true;
+  try{
+    await createMemo(histFarm, {cat:document.getElementById('mm-cat').value, txt, src:'staff', log_id:null});
+    toast('참고사항을 추가했어요'); renderConsult();
+  }catch(e){ if(btn) btn.disabled = false; toast(`추가하지 못했습니다. 잠시 후 다시 시도해 주십시오. 오류코드: ${errCode(e)}`); }
+}
+memoEl.addEventListener('click', async e => {
+  const c = e.target.closest('[data-call]'); if(c){ openCall(c.dataset.call, c); return; }
+  if(e.target.closest('[data-memo-retry]')){ loadMemos(histFarm, true).catch(() => {}).finally(renderConsult); renderConsult(); return; }
+  const a = e.target.closest('[data-memo-add]'); if(a) return addStaffMemo(a);
+  const d = e.target.closest('[data-memo-del]'); if(!d) return;
+  const code = histFarm, entry = memoCache[code], memo = entry && entry.list.find(x => String(x.memo_id) === d.dataset.memoDel);
+  if(!memo || !confirm(`이 참고사항을 지울까요?\n\n[${memo.cat}] ${memo.txt}`)) return;
+  d.disabled = true;
+  try{
+    await sendJSON('DELETE', `/memos/${encodeURIComponent(memo.memo_id)}`);
+    entry.list = entry.list.filter(x => x !== memo);
+    const cu = customers.find(x => x.code === code); if(cu && cu.memo_count != null) cu.memo_count = Math.max(0, cu.memo_count - 1);
+    toast('참고사항을 지웠어요'); renderConsult();
+  }catch(err){ d.disabled = false; toast(`지우지 못했습니다. 잠시 후 다시 시도해 주십시오. 오류코드: ${errCode(err)}`); }
+});
+memoEl.addEventListener('keydown', e => { if(e.key === 'Enter' && e.target.id === 'mm-txt' && !e.isComposing) addStaffMemo(memoEl.querySelector('[data-memo-add]')); });
+
+/* ===== 통화 녹음 올리기 · STT 다시 변환 =====
+   POST {API}/logs/{log_id}/recording (form-data file) → 서버가 OpenAI STT + 요약까지 하고 {status:'완료'|'실패', error}
+   POST {API}/logs/{log_id}/stt/retry → 저장된 녹음으로 다시 변환 */
+const recFile = document.getElementById('rec-file');
+let uploadTarget = null;
+recFile.addEventListener('change', () => {
+  const f = recFile.files[0], id = uploadTarget; uploadTarget = null;
+  if(!f || id == null) return;
+  if(f.size > 25 * 1024 * 1024){ toast('녹음 파일은 25MB 이하만 올릴 수 있어요'); return; }
+  runStt(id, f);
+});
+async function runStt(logId, file){
+  const key = String(logId);
+  if(uploading.has(key)) return;
+  uploading.add(key); renderConsult();
+  toast(file ? '녹음을 올리고 글로 바꾸는 중이에요… (통화 길이에 따라 수십 초)' : '다시 변환하는 중이에요…');
+  try{
+    let res;
+    if(file){
+      const fd = new FormData(); fd.append('file', file);
+      res = await fetch(`${API}/logs/${encodeURIComponent(logId)}/recording`, {method:'POST', headers:{'X-CSRF-Protection':'1'}, body:fd})
+        .catch(e => { throw Object.assign(e, {code:'NET'}); });
+      if(!res.ok){
+        let msg = `HTTP ${res.status}`;
+        try{ const j = await res.json(); if(j.detail) msg += ' · ' + (typeof j.detail === 'string' ? j.detail : JSON.stringify(j.detail)); }catch(e){}
+        throw Object.assign(new Error(msg), {code:res.status});
+      }
+      res = await res.json();
+    }else res = await sendJSON('POST', `/logs/${encodeURIComponent(logId)}/stt/retry`);
+    delete sttCache[key];
+    uploading.delete(key);
+    [customers, history] = await loadMasked();
+    renderConsult();
+    if(res && res.status === '완료'){ toast('통화 기록을 만들었어요'); openCall(logId, null); }
+    else{ console.warn(res && res.error); toast('글로 바꾸지 못했어요. \'다시 변환\'을 눌러 주세요.'); }
+  }catch(e){
+    uploading.delete(key); renderConsult();
+    toast(`녹음을 처리하지 못했습니다. 오류코드: ${errCode(e)}`);
+  }
+}
 
 load();
 </script>
