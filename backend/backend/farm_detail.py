@@ -34,6 +34,7 @@
   GET  /api/households?q=&limit=                어가 목록 (상세 화면의 어가 선택용)
   GET  /api/households/{household_id}/detail    어가 상세 전체
   POST /api/households/{household_id}/consult-logs    상담 결과 기록
+  GET  /api/households/{household_id}/consult         상담 기록만 새로 받기 (통화 녹음 STT 결과 포함)
   POST /api/households/{household_id}/claim-estimate  고수온 피해 시 예상 보험금 (보험금 계산 API 위임)
 
 실행 (2026-10-26 sooui9: 기존 백엔드 8000에 라우터로 붙이도록 변경)
@@ -1576,22 +1577,51 @@ CONSULT_STATUS = ("미연락", "부재·재연락", "문자 발송", "상담 예
 ITEM_RESULT = ("가입", "보류", "안내", "타 기관 가입")
 
 
+_call_records_ready: Optional[bool] = None
+
+
+def call_records_ready() -> bool:
+    """통화 녹음 테이블(consult_call_records)이 있는지. 마이그레이션 전이면 STT 정보 없이 상담 기록만 보여 줘요."""
+    global _call_records_ready
+    if not _call_records_ready:   # 없으면 매번 다시 확인 (마이그레이션 후 서버 재시작 없이 반영)
+        row = q_one("SELECT to_regclass('customer_service.consult_call_records') IS NOT NULL AS ok")
+        _call_records_ready = bool(row and row["ok"])
+    return _call_records_ready
+
+
+def fmt_dur(sec: Any) -> Optional[str]:
+    if sec is None:
+        return None
+    s = int(float(sec))
+    return f"{s // 60}:{s % 60:02d}"
+
+
 def load_consult(household_id: int, today: date) -> dict:
     season = consult_season(today)
     case = q_one("""SELECT case_id, season, status, next_contact_at, last_contact_at
                     FROM customer_service.consult_cases WHERE household_id = %s AND season = %s""",
                  (household_id, season))
-    logs = q_all("""SELECT l.log_id, l.contacted_at, l.channel, l.result_status, l.memo, l.next_contact_at, l.staff_name,
+    stt = call_records_ready()
+    logs = q_all(f"""SELECT l.log_id, l.contacted_at, l.channel, l.result_status, l.memo, l.next_contact_at, l.staff_name,
                            COALESCE(json_agg(json_build_object('mapping_id', i.mapping_id, 'result', i.result,
                                     'species', fs.standard_name)) FILTER (WHERE i.log_item_id IS NOT NULL), '[]') AS items
+                           {", cr.stt_status, cr.duration_sec, cr.summary AS stt_summary, cr.error AS stt_error" if stt else ""}
                     FROM customer_service.consult_logs l
                     LEFT JOIN customer_service.consult_log_items i ON i.log_id = l.log_id
                     LEFT JOIN customer_service.household_species hs ON hs.mapping_id = i.mapping_id
                     LEFT JOIN customer_service.fish_species fs ON fs.species_id = hs.species_id
+                    {"LEFT JOIN customer_service.consult_call_records cr ON cr.log_id = l.log_id" if stt else ""}
                     WHERE l.household_id = %s
-                    GROUP BY l.log_id
+                    GROUP BY l.log_id{", cr.log_id" if stt else ""}
                     ORDER BY l.contacted_at DESC
                     LIMIT 20""", (household_id,))
+    # 통화 녹음 STT: 기록마다 stt = {status: 대기·변환 중·완료·실패, dur: 'm:ss', summary, error} 또는 null
+    for lg in logs:
+        status = lg.pop("stt_status", None)
+        dur, summary, error = lg.pop("duration_sec", None), lg.pop("stt_summary", None), lg.pop("stt_error", None)
+        lg["stt"] = None if status is None else {
+            "status": status, "dur": fmt_dur(dur), "summary": summary,
+            "error": error if status == "실패" else None}
     return {"season": season, "status": case["status"] if case else "미연락",
             "next_contact_at": case["next_contact_at"] if case else None,
             "last_contact_at": case["last_contact_at"] if case else None, "logs": logs}
@@ -1773,6 +1803,14 @@ class EstimateIn(BaseModel):
     damaged_kg: Optional[Decimal] = None
     avg_weight_g: Optional[Decimal] = None
     price_variant: Optional[str] = None
+
+
+@router.get("/api/households/{household_id}/consult")
+def household_consult(household_id: int):
+    """상담 기록만 (통화 녹음을 올린 뒤 STT 결과를 다시 받을 때). 수온·보험 계산 없이 가벼워요."""
+    if q_one("SELECT 1 FROM customer_service.fishery_households WHERE household_id = %s", (household_id,)) is None:
+        raise HTTPException(404, "어가 정보를 찾을 수 없어요")
+    return ok(load_consult(household_id, today_kst()))
 
 
 @router.post("/api/households/{household_id}/claim-estimate")
