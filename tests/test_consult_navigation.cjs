@@ -66,7 +66,7 @@ test('empty lists and connection errors show an explicit state', async () => {
   context.apiGet = async () => [];
   await context.initApi();
   await context.renderApiDetail();
-  assert.ok(context.boxes.at(-1)[0].includes('등록된 어가가 없어요'));
+  assert.ok(context.boxes.at(-1)[0].includes('등록된 어가 없음'));
   context.apiGet = async () => { throw Error('HTTP 503'); };
   await context.initApi();
   await context.renderApiDetail();

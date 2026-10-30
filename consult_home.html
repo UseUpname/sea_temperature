@@ -420,7 +420,7 @@
           <div class="ht-legend" aria-hidden="true"><span><i class="l-apply"></i>신청</span><span><i class="l-warn"></i>주의</span></div>
           <img class="dash-img" id="dash-img" alt="연도별 신청·주의 건수 그래프">
           <p class="ht-note" id="dash-src"></p>
-          <p class="ht-note" id="dash-miss" hidden>그래프를 불러오지 못했어요. 백엔드(8000 포트)를 켜거나, sea_temperature 폴더에서 python dash_chart.py 를 실행해 out 폴더에 그림을 만들어 주세요.</p>
+          <p class="ht-note" id="dash-miss" hidden>그래프 조회 실패 · 백엔드(8000 포트) 실행 또는 sea_temperature 폴더에서 python dash_chart.py 실행 후 out 폴더에 그림 생성 필요</p>
         </div>
       </section>
 
@@ -449,7 +449,7 @@
               <tbody id="rows"></tbody>
             </table>
           </div>
-          <div class="empty" id="empty" hidden>조건에 맞는 어가가 없어요.</div>
+          <div class="empty" id="empty" hidden>조건에 해당하는 어가 없음</div>
         </section>
 
         <aside class="panel" id="bulk-panel" aria-labelledby="h-bulk">
@@ -479,7 +479,7 @@
       </div>
     </section>
     <p class="foot">
-      <span class="foot-rule">위험 단계는 앱 기준(관심 25℃ · 주의 28℃ · 경보 28℃ 이상 3일)으로 판정한 참고값이며,</span> 공식 특보나 보험금 지급 기준이 아닙니다(Weather data by Open-Meteo.com).<br>
+      <span class="foot-rule">위험 단계는 앱 기준(관심 25℃ · 주의 28℃ · 경보 28℃ 이상 3일)으로 판정한 참고값 ·</span> 공식 특보·보험금 지급 기준 아님 (Weather data by Open-Meteo.com).<br>
       문의 · 수협중앙회 경남지역본부 <a href="tel:0552891124">055-289-1124</a> · 수협은행 경남지역본부 <a href="tel:0556030466">055-603-0466</a>
     </p>
   </main>
@@ -543,8 +543,8 @@ function setMode(ok, err){
   document.getElementById('data-mode').textContent = ok ? 'DB 연결됨' : '가상 데이터 · 서버 연결 실패';
   document.getElementById('updated').textContent = ok ? `마지막 조회 ${Shell.lastViewed()}` : '2026.10.22 (목) 06:00 기준';
   if(!ok) addNotice(location.protocol === 'file:'
-    ? '⚠️ 파일로 열면 서버에 연결할 수 없어 가상 데이터를 보여 주고 있어요. sea_temperature 폴더에서 python -m http.server 8765 를 켜고 http://localhost:8765/consult_home.html 로 열어 주세요.'
-    : `⚠️ 서버에 연결하지 못해 예시 데이터를 보여 드립니다. 잠시 후 새로고침해 주십시오. 오류코드: ${errCode(err)}`);
+    ? '⚠️ 파일로 열어 서버 연결 불가 · 가상 데이터 표시 중. sea_temperature 폴더에서 python -m http.server 8765 실행 후 http://localhost:8765/consult_home.html 로 접속 필요'
+    : `⚠️ 서버 연결 실패 · 예시 데이터 표시 중 · 잠시 후 새로고침 필요 · 오류코드: ${errCode(err)}`);
 }
 
 /* ===== 기본 값 ===== */
@@ -680,7 +680,7 @@ function chartSvg(I, pick, o = {}){
 // 상품요약서·사업방법서(2026.5.13) 기준. 공개 자료에 없는 값은 비워 둠.
 const PRODUCTS = {
   cage:   {name:'해상가두리어류 재해보험', heat:'rider', base:'태풍·해일·풍랑·적조', rider:'고수온·저수온·이상수질', months:[1,2,3,4,5,10,11,12], saleText:'1~5·10~12월', subsidy:'일부', split4:true},
-  ascid:  {name:'멍게 보험', heat:'rider', months:[4,5,6,7,8,9,10], saleText:'4~10월', subsidy:'일부', split4:false, caution:'멍게는 상품요약서와 약관(제5조)의 고수온 보장 내용이 달라요. 약관 우선, 수협에 확인 필요'},
+  ascid:  {name:'멍게 보험', heat:'rider', months:[4,5,6,7,8,9,10], saleText:'4~10월', subsidy:'일부', split4:false, caution:'멍게는 상품요약서와 약관(제5조)의 고수온 보장 내용 상이 · 약관 우선, 수협 확인 필요'},
   abaSea: {name:'해상 전복 보험', heat:'base', months:[1,2,3,4,5,10,11,12], saleText:'1~5·10~12월', subsidy:'50%', split4:true},
   abaLand:{name:'육상수조식 전복 보험', heat:'rider', months:[1,2,3,4,5,10,11,12], saleText:'1~5·10~12월', subsidy:'일부', split4:false},
   sqrt:   {name:'오만둥이 보험', heat:'base', months:[7,8,9,10,11], saleText:'7~11월', subsidy:'일부', split4:false},
@@ -759,7 +759,7 @@ function toFarms(customers){
   return customers.map(customer => {
     const householdId = Number(customer.code);
     if(!Number.isSafeInteger(householdId) || householdId <= 0 || !statusKeys[customer.status]){
-      throw new Error('어가 번호 또는 상담 상태를 확인해 주세요.');
+      throw new Error('어가 번호 또는 상담 상태 확인 필요');
     }
     return {
       id:String(householdId), household_id:householdId,
@@ -768,7 +768,7 @@ function toFarms(customers){
       status:statusKeys[customer.status], next:null,
       items:customer.contracts.map(contract => {
         if(!Object.hasOwn(coverageKeys, contract.coverage)){
-          throw new Error('어가 보험 보장 상태를 확인해 주세요.');
+          throw new Error('어가 보험 보장 상태 확인 필요');
         }
         // 상담 목록 API에는 상품·양식 방식·어종 매핑 번호가 없어요.
         return {species:contract.species, ins:coverageKeys[contract.coverage],
@@ -789,7 +789,7 @@ async function loadFarms(){
   const miss = [...new Set(farms.filter(f => !regionInfo[f.region]).map(f => f.region))];
   if(miss.length){
     farms = farms.filter(f => regionInfo[f.region]);
-    addNotice(`⚠️ 수온 예측이 없는 지역이라 목록에서 뺀 어가가 있어요: ${miss.join(', ')}`);
+    addNotice(`⚠️ 수온 예측이 없는 지역 어가는 목록에서 제외: ${miss.join(', ')}`);
   }
 }
 
@@ -1136,7 +1136,7 @@ async function sendMsgs(kind){
     ? `상담 이력 저장 ${sent.length}곳 · 시연용 · 실제 문자 미발송`
     : `가상 데이터 · 서버 저장 안 함 · 이 브라우저에만 반영 ${sent.length}곳 · 실제 문자 미발송`);
   if(skipped.length) lines.push(`수신 미동의 ${skipped.length}곳 발송 제외 · 연락 순서 목록에 유지`);
-  if(fail.length) lines.push(`저장 실패 ${fail.length}곳: ${fail.map(x => x.name).join(', ')} · 오류코드 ${[...new Set(fail.map(x => x.code))].join(', ')}\n선택과 문구 유지 · 다시 시도해 주십시오`);
+  if(fail.length) lines.push(`저장 실패 ${fail.length}곳: ${fail.map(x => x.name).join(', ')} · 오류코드 ${[...new Set(fail.map(x => x.code))].join(', ')}\n선택·문구 유지 · 재시도 필요`);
   const res = document.getElementById('msg-res');
   res.textContent = lines.join('\n');
   res.className = 'msg-res ' + (fail.length ? 'ng' : 'ok');
@@ -1176,7 +1176,7 @@ dashImg.addEventListener('load', () => {
   dashSub();
   // 지역·자료 안내 문구는 표시하지 않음 (서버 연결 실패 때만 알림)
   const src = document.getElementById('dash-src');
-  src.textContent = dashFallback ? '⚠️ 서버에 연결하지 못해 저장해 둔 그림(out 폴더)을 보여 주고 있어요.' : '';
+  src.textContent = dashFallback ? '⚠️ 서버 연결 실패 · 저장된 그림(out 폴더) 표시 중' : '';
   src.hidden = !dashFallback;
 });
 dashImg.addEventListener('error', () => {

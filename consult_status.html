@@ -166,7 +166,7 @@
             </table>
           </div>
           <nav class="hist-pager" id="cust-pager" aria-label="고객 목록 페이지" hidden></nav>
-          <div class="empty" id="loading">불러오는 중이에요…</div>
+          <div class="empty" id="loading">조회 중…</div>
           <div class="empty" id="cust-empty" hidden></div>
         </section>
         <section class="panel hist-panel" id="hist-panel" aria-labelledby="h-hist">
@@ -175,14 +175,14 @@
             <div class="filters" id="hist-filter"></div>
           </div>
           <ul class="hist-list" id="hist-rows" aria-live="polite"></ul>
-          <div class="empty" id="hist-empty" hidden>상담 내역이 없어요.</div>
+          <div class="empty" id="hist-empty" hidden>등록된 상담 내역 없음</div>
           <nav class="hist-pager" id="hist-pager" aria-label="상담 내역 페이지" hidden></nav>
         </section>
       </div>
     </section>
 
     <p class="foot">
-      <span class="foot-rule">위험 단계는 앱 기준(관심 25℃ · 주의 28℃ · 경보 28℃ 이상 3일)으로 판정한 참고값이며,</span> 공식 특보나 보험금 지급 기준이 아닙니다(Weather data by Open-Meteo.com).<br>
+      <span class="foot-rule">위험 단계는 앱 기준(관심 25℃ · 주의 28℃ · 경보 28℃ 이상 3일)으로 판정한 참고값 ·</span> 공식 특보·보험금 지급 기준 아님 (Weather data by Open-Meteo.com).<br>
       문의 · 수협중앙회 경남지역본부 <a href="tel:0552891124">055-289-1124</a> · 수협은행 경남지역본부 <a href="tel:0556030466">055-603-0466</a>
     </p>
   </main>
@@ -193,9 +193,9 @@
 <!-- 상담 기록 삭제 확인 (평소 삭제하지 않으므로 한 번 더 확인) -->
 <dialog class="confirm" id="del-dialog" aria-labelledby="del-title">
   <form method="dialog">
-    <h4 id="del-title"><span class="ic" aria-hidden="true">!</span>상담 기록을 삭제할까요?</h4>
+    <h4 id="del-title"><span class="ic" aria-hidden="true">!</span>상담 기록 삭제 확인</h4>
     <dl class="sum" id="del-sum"></dl>
-    <p class="warn" id="del-warn">삭제하면 되돌릴 수 없어요. 이 기록의 어종별 결과도 함께 지워지고, 고객의 현재 상태는 남은 기록 중 가장 최근 것으로 바뀌어요.</p>
+    <p class="warn" id="del-warn">삭제 후 복구 불가 · 이 기록의 어종별 결과도 함께 삭제 · 고객의 현재 상태는 남은 기록 중 가장 최근 기록으로 변경</p>
     <label class="ack"><input type="checkbox" id="del-ack"><span>확인함</span></label>
     <div class="btns">
       <button type="submit" class="btn" value="cancel" id="del-cancel" autofocus>취소</button>
@@ -293,10 +293,10 @@ function renderConsult(){
   if(histFarm && !custs.some(c => c.code === histFarm)) histFarm = null;
   document.getElementById('q-count').textContent = q ? `${custs.length}명` : `${office} ${base.length}명`;
   document.getElementById('cust-empty').textContent = base.length
-    ? '검색 결과가 없어요. 고객번호나 전화번호 뒷자리, 어종으로 찾아보세요.'
+    ? '검색 결과 없음 · 고객번호, 전화번호 뒷자리, 어종으로 검색 가능'
     : progOnly
-      ? `${office} 지역에 상담 진행 중인 고객이 없어요. '전체'를 누르면 모든 고객을 볼 수 있어요.`
-      : `${office} 지역 고객이 없어요. 맨 위 '담당'에서 다른 지역을 골라 주세요.`;
+      ? `${office} 지역 상담 진행 중인 고객 없음 · '전체' 클릭 시 모든 고객 표시`
+      : `${office} 지역 고객 없음 · 상단 '담당'에서 다른 지역 선택`;
   document.getElementById('cust-empty').hidden = custs.length > 0;
   const customerKey = [office, progOnly, q].join('|');
   if(customerKey !== custKey){ custKey = customerKey; custPage = 1; }
@@ -329,7 +329,7 @@ function renderConsult(){
   document.getElementById('hist-sub').textContent = hf ? `${hf.name} (${hf.code}) · ${items.length}건 · 최근 순` : `${items.length}건 · 최근 순`;
   document.getElementById('hist-filter').innerHTML = hf ? `<button type="button" class="chip" data-hist-all aria-pressed="true" aria-label="${esc(hf.name)} 선택 해제, 전체 보기">${esc(hf.name)} ✕</button>` : '';
   document.getElementById('hist-empty').hidden = items.length > 0;
-  document.getElementById('hist-empty').textContent = hf ? `${hf.name} 고객은 아직 상담 내역이 없어요.` : '상담 내역이 없어요.';
+  document.getElementById('hist-empty').textContent = hf ? `${hf.name} 고객 상담 내역 없음` : '등록된 상담 내역 없음';
   // 지역·필터·검색·고객이 바뀌면 1페이지부터, 삭제로 마지막 페이지가 비면 앞 페이지로
   const key = [office, progOnly, q, histFarm].join('|');
   if(key !== histKey){ histKey = key; histPage = 1; }
@@ -379,8 +379,8 @@ async function load(){
     history = SAMPLE.history.map((h, i) => ({...h, log_id:'s' + i}));   // 가상 데이터용 기록 번호
     dbMode = false;
     notice.textContent = location.protocol === 'file:'
-      ? '⚠️ 파일로 열면 서버에 연결할 수 없어 가상 데이터를 보여 주고 있어요. http://localhost:8765/consult_status.html 로 열어 주세요.'
-      : `⚠️ 서버에 연결하지 못해 예시 데이터를 보여 드립니다. 잠시 후 새로고침해 주십시오. 오류코드: ${errCode(e)}`;
+      ? '⚠️ 파일로 열어 서버 연결 불가 · 가상 데이터 표시 중. http://localhost:8765/consult_status.html 로 접속 필요'
+      : `⚠️ 서버 연결 실패 · 예시 데이터 표시 중 · 잠시 후 새로고침 필요 · 오류코드: ${errCode(e)}`;
     notice.hidden = false;
     document.getElementById('data-mode').textContent = '가상 데이터 · 서버 연결 실패';
     document.getElementById('updated').textContent = '2026.10.22 (목) 06:00 기준';
@@ -394,7 +394,7 @@ async function load(){
 /* 알림으로 고른 고객을 보여 줘요: 담당 지역을 그 고객 지역으로 · 검색·'진행' 필터 해제 · 고객 선택(오른쪽 상담 내역) · 그 줄로 스크롤 */
 function focusCustomer(code){
   const c = customers.find(x => x.code === String(code));
-  if(!c){ toast('알림의 고객을 목록에서 찾지 못했어요'); return; }
+  if(!c){ toast('알림의 고객이 목록에 없음'); return; }
   if(c.region && c.region !== office && OFFICES.includes(c.region)){
     office = c.region; officeSel.value = office; putOffice(office);
   }
@@ -466,9 +466,9 @@ function askDelete(logId, opener){
     <dt>결과</dt><dd><b>${esc(h.result)}</b></dd>
     <dt>내용</dt><dd>${esc(h.memo)}</dd>`;
   const next = sameCust[1];
-  document.getElementById('del-warn').textContent = '삭제하면 되돌릴 수 없어요. 이 기록의 어종별 결과도 함께 지워져요.' + (isLatest
-    ? (next ? ` 가장 최근 기록이라 고객의 현재 상태가 '${next.result}'(${next.date})로 바뀌어요.` : ' 남은 기록이 없어 고객이 \'미연락\' 상태로 돌아가요.')
-    : '') + ' 삭제의 책임은 해당 담당자에게 있습니다.';
+  document.getElementById('del-warn').textContent = '삭제 후 복구 불가 · 이 기록의 어종별 결과도 함께 삭제' + (isLatest
+    ? (next ? ` · 가장 최근 기록 · 삭제 시 고객 현재 상태 '${next.result}'(${next.date})로 변경` : ' · 남은 기록 없음 · 삭제 시 고객 상태 \'미연락\'으로 변경')
+    : '') + ' · 삭제 책임은 해당 담당자에게 있음';
   delAck.checked = false; delOk.disabled = true; delOk.textContent = '삭제';
   delDialog.showModal();
 }
@@ -491,20 +491,20 @@ delOk.addEventListener('click', async () => {
       }
       // 상태·최근 연락·상담 수가 바뀌므로 서버에서 다시 받아요
       [customers, history] = await loadMasked();
-      toast(res.status === 404 ? '이미 지워진 기록이에요 · 목록을 새로 불러왔어요' : `${h.name} ${h.date} 상담 기록을 삭제했어요`);
+      toast(res.status === 404 ? '이미 삭제된 기록 · 목록 새로고침 완료' : `${h.name} ${h.date} 상담 기록 삭제 완료`);
       if(window.Shell) Shell.reloadNoti();   // 지운 기록의 알림도 함께 사라지게
     }else{
       history = history.filter(x => x !== h);
       const c = customers.find(x => x.code === h.code), rest = history.filter(x => x.code === h.code);
       if(c){ c.consult_count = rest.length; c.last_contact = rest[0] ? rest[0].date : null; c.status = rest[0] ? rest[0].result.replace(' · ', '·') : '미연락'; }
-      toast('가상 데이터라 이 화면에서만 지웠어요');
+      toast('가상 데이터 · 이 화면에서만 삭제');
     }
     delDialog.close();
     renderConsult();
   }catch(e){
     if(li) li.classList.remove('removing');
     delOk.disabled = false; delOk.textContent = '삭제';
-    toast(`삭제하지 못했습니다. 잠시 후 다시 시도해 주십시오. 오류코드: ${errCode(e)}`);
+    toast(`삭제 실패 · 잠시 후 재시도 필요 · 오류코드: ${errCode(e)}`);
   }
 });
 document.getElementById('hist-rows').addEventListener('click', e => {
