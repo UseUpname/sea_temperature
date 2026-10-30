@@ -125,6 +125,18 @@
       };
       new MutationObserver(shorten).observe(upd, {childList:true, subtree:true, characterData:true});
       shorten();
+      // 글자 시작을 메뉴 아이콘이 끝나는 위치에 맞춰요 (각 화면 CSS 가 메뉴 여백을 바꿔도 실측으로 맞춤)
+      const side = me.previousElementSibling;
+      const alignFoot = () => {
+        const nav = side.querySelector('.nav'), ic = nav && nav.querySelector('.ic');
+        if(!ic) return;
+        const x = ic.getBoundingClientRect().right - upd.getBoundingClientRect().left;
+        if(x > 0) side.style.setProperty('--side-foot-left', `${x}px`);
+      };
+      alignFoot();
+      document.addEventListener('DOMContentLoaded', alignFoot, {once:true});
+      window.addEventListener('load', alignFoot, {once:true});
+      new ResizeObserver(alignFoot).observe(side);
     }
     return;
   }
