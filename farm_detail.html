@@ -404,6 +404,69 @@
   .scb-val{font-size:12.5px;white-space:nowrap;color:var(--muted)}
   .scb-val b{color:#237a4b;font-size:13.5px}
 </style>
+<style>
+  /* 통화 기록 보기 (STT) 버튼 · 통화 기록 창 */
+  .hist-stt{margin-top:6px;display:inline-flex;align-items:center;gap:4px;border:1px solid #e3d8f5;background:#fcfaff;color:#6b3fb0;border-radius:999px;padding:2px 11px;font-size:12px;font-weight:700}
+  .hist-stt:hover{background:#f1ebfb;border-color:#c9b6ea}
+  .hist-stt.busy{cursor:default;color:var(--muted);background:var(--soft);border-color:var(--line)}
+  .hist-stt.fail{cursor:default;color:var(--alert);background:var(--alert-soft);border-color:#f5c2bd}
+  .hist-stt-row{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:6px}
+  .hist-stt-row .hist-stt{margin-top:0}
+  .hist-up{margin-top:6px;border:1px dashed var(--line-strong);background:#fff;color:var(--sub);border-radius:999px;padding:2px 11px;font-size:12px;font-weight:700}
+  .hist-stt-row .hist-up{margin-top:0}
+  .hist-up:hover{border-color:#c9b6ea;color:#6b3fb0}
+  .stt-why{margin-top:4px;font-size:12px;color:var(--alert);line-height:1.5}
+  dialog.call{margin:auto;border:0;border-radius:14px;width:min(980px,calc(100vw - 32px));max-height:calc(100vh - 40px);box-shadow:0 18px 48px rgba(20,30,50,.25);padding:0;overflow:hidden;color:var(--text)}
+  dialog.call::backdrop{background:rgba(22,26,34,.5)}
+  .cd{display:flex;flex-direction:column;max-height:calc(100vh - 40px)}
+  .cd-h{padding:16px 20px 12px;display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+  .cd-h h4{font-size:18px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .cd-play:disabled,.cd-stop:disabled{opacity:.45;cursor:not-allowed}
+  .cd-sub{font-size:12.5px;color:var(--muted);margin-top:2px}
+  .cd-x{border:0;background:none;font-size:20px;line-height:1;color:var(--sub);padding:4px}
+  .cd-player{display:flex;align-items:center;gap:12px;padding:10px 20px;background:var(--soft);border-top:1px solid var(--line);border-bottom:1px solid var(--line);flex-wrap:wrap}
+  .cd-play{width:36px;height:36px;border-radius:50%;border:0;background:#0b7591;color:#fff;font-size:13px;flex:none}
+  .cd-stop{border:1px solid var(--line-strong);background:#fff;border-radius:8px;padding:4px 10px;font-size:12px}
+  .cd-track{flex:1;min-width:120px;height:6px;border-radius:999px;background:#dfe3ea;overflow:hidden;cursor:pointer;position:relative}
+  .cd-track::before{content:'';position:absolute;left:0;right:0;top:-8px;bottom:-8px}   /* 누르기 쉬운 영역 */
+  .cd-track i{display:block;height:100%;width:0;background:var(--accent);transition:width .3s}
+  .cd-track.live i{transition:none}   /* 녹음 재생 중엔 시간에 맞춰 바로바로 */
+  .cd-clock{font-size:12.5px;color:var(--sub);font-variant-numeric:tabular-nums;white-space:nowrap}
+  .cd-b{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);min-height:0;flex:1;overflow:hidden}
+  .cd-col{padding:14px 18px;overflow-y:auto;min-height:0}
+  .cd-col+.cd-col{border-left:1px solid var(--line)}
+  .cd-ch{font-weight:700;font-size:13.5px;margin-bottom:10px}
+  .cd-ch small{font-weight:400;color:var(--muted);font-size:11.5px;margin-left:6px}
+  .cd-ln{display:grid;grid-template-columns:58px 1fr;gap:0 10px;padding:5px 6px;margin-bottom:4px;border-radius:8px;cursor:pointer}
+  .cd-ln:hover{background:#f6f7fa}
+  .cd-ln.now,.cd-ln.now:hover{background:#fff6c8}
+  .cd-ln .sp{grid-row:span 2;align-self:start;text-align:center;font-size:12px;font-weight:700;border-radius:6px;padding:2px 0}
+  .cd-ln .sp.s{background:var(--watch-soft);color:var(--watch)}
+  .cd-ln .sp.c{background:var(--warn-soft);color:var(--warn)}
+  .cd-ln .ts{font-size:11.5px;color:var(--muted)}
+  .cd-ln p{font-size:14px;line-height:1.6}
+  .cd-ln mark{background:#fff1b8;color:inherit;border-radius:3px;padding:0 1px}
+  .cd-sum{border:1px solid var(--line-strong);border-radius:10px;padding:12px 14px;font-weight:700;font-size:14.5px;line-height:1.6}
+  .cd-found{list-style:none;display:flex;flex-direction:column;gap:6px}
+  .cd-found li{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:8px;padding:7px 10px;font-size:14px;background:#fff}
+  .cd-found li .tx{flex:1;min-width:0}
+  .cd-found .done{font-size:12.5px;color:var(--muted);white-space:nowrap}
+  .btn.ai{background:#6b3fb0;border-color:#6b3fb0;color:#fff}
+  /* 참고사항 분류 색 */
+  .cat{display:inline-block;flex:none;font-size:12px;font-weight:700;border-radius:6px;padding:1px 8px;white-space:nowrap;background:#eef0f4;color:var(--sub)}
+  .cat-연락{background:#e3eefb;color:#1d5fb8}.cat-관심{background:#fff4c2;color:#7a5a00}.cat-경험{background:#fde4e2;color:#b42318}
+  .cat-가족{background:#dcf3e3;color:#17663a}.cat-소통{background:#eef0f4;color:var(--sub)}
+  /* 어가 상세: 상담 기록의 AI 메모 · 녹음 올리기 */
+  .rec-up{border:1px dashed #c9b6ea;background:#fcfaff;border-radius:8px;padding:8px 10px;display:flex;flex-direction:column;gap:4px}
+  .rec-up[hidden]{display:none}
+  .rec-up b{font-size:13px;color:#6b3fb0}
+  .rec-up input[type=file]{font-size:13px}
+  .aim{margin-top:6px;border:1px solid #e3d8f5;background:#fcfaff;border-radius:8px;padding:8px 10px}
+  .aim-h{display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--muted)}
+  .aim-tag{font-size:11.5px;font-weight:700;color:#6b3fb0;background:#f1ebfb;border-radius:6px;padding:0 7px}
+  .aim-s{font-size:13px;margin:4px 0 6px;line-height:1.55;color:var(--text)}
+  .stt-why{margin-top:4px;font-size:12px;color:var(--alert);line-height:1.5}
+</style>
 <link rel="stylesheet" href="shell.css">
 <link rel="stylesheet" href="figma-theme.css">
 </head>
@@ -572,7 +635,35 @@
   </main>
 </div>
 
+<!-- 통화 기록 창: 통화로 진행한 상담의 STT 기록 + AI 요약 + 참고사항 후보 -->
+<dialog class="call" id="call-dlg" aria-labelledby="call-title">
+  <div class="cd">
+    <div class="cd-h">
+      <div><h4 id="call-title"></h4><div class="cd-sub" id="call-sub"></div></div>
+      <button type="button" class="cd-x" id="call-x" aria-label="닫기">✕</button>
+    </div>
+    <div class="cd-player">
+      <button type="button" class="cd-play" id="call-play" aria-label="녹음 재생">▶</button>
+      <button type="button" class="cd-stop" id="call-stop">처음부터</button>
+      <div class="cd-track" id="call-bar" title="눌러서 그 위치부터 듣기"><i id="call-track"></i></div>
+      <span class="cd-clock" id="call-clock"></span>
+      <span class="note" id="call-note"></span>
+    </div>
+    <div class="cd-b">
+      <section class="cd-col"><div class="cd-ch">🎙 STT 기록<small>음성을 글로 · 화자 자동 구분 · 줄을 누르면 그 부분부터 들어요</small></div><div id="call-lines"></div></section>
+      <section class="cd-col">
+        <div class="cd-ch">✨ AI 요약<small>STT 기록으로 자동 작성 · 참고용</small></div>
+        <div class="cd-sum" id="call-sum"></div>
+        <div class="cd-ch" style="margin-top:16px">참고사항 후보<small>맞는 것만 추가하세요</small></div>
+        <ul class="cd-found" id="call-found"></ul>
+      </section>
+    </div>
+    <div class="cd-f"><button type="button" class="btn ai" id="call-addall">참고사항 모두 추가</button><button type="button" class="btn" id="call-close">닫기</button></div>
+  </div>
+</dialog>
+
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
+<input type="file" id="stt-file" accept=".mp3,.m4a,.wav,.webm,.mp4,.mpeg,.mpga,audio/*" hidden>
 
 <script>
 /* ===== 데이터 연결 ===== */
@@ -1587,12 +1678,16 @@ async function renderApiDetail(force){
           <select data-ares="${c.mapping_id}" data-ins="${c.contract ? c.contract.insurance_id : ''}"><option value="">기록 안 함</option>${ITEM_RESULT.map(v => `<option>${v}</option>`).join('')}</select></label>`).join('')}
         <label>상담자 <input id="r-staff" type="text" maxlength="50" placeholder="이름"></label>
         <label class="full">메모 <input id="r-memo" type="text" placeholder="예) 조피볼락 가입 의향, 참돔은 다음 달 결정"></label>
+        <div class="full rec-up" id="r-rec-wrap" ${recOpen.has(H.household_id) ? '' : 'hidden'}>
+          <b>🎙 통화 녹음</b>
+          <input id="r-rec" type="file" accept=".mp3,.m4a,.wav,.webm,.mp4,.mpeg,.mpga,audio/*" aria-label="통화 녹음 파일">
+        </div>
         <button type="button" class="btn pri full" data-act="api-save">결과 저장</button>
       </div>
       <p class="note" style="margin-top:6px">시즌(${esc(D.consult.season)}) 상담 상태와 상담 기록에 함께 저장 · 어종별 결과 별도 기록</p>`)}
 
     ${acc('hist', '상담 기록', `${D.consult.logs.length}건${D.consult.next_contact_at ? ' · 상담일 ' + mdStr(D.consult.next_contact_at) : ''}`, D.consult.logs.length
-      ? `<ul class="hist-list">${D.consult.logs.map(l => `<li><b>${esc(String(l.contacted_at).slice(0,16).replace('T',' '))}</b> · ${esc(l.channel)} · <b>${esc(l.result_status)}</b>${l.items.length ? ' · ' + l.items.map(i => esc(i.species) + ' ' + esc(i.result)).join(', ') : ''}${l.memo ? `<br>${esc(l.memo)}` : ''}${l.staff_name ? ` <span class="note">(${esc(l.staff_name)})</span>` : ''}</li>`).join('')}</ul>`
+      ? `<ul class="hist-list">${D.consult.logs.map(l => `<li><b>${esc(String(l.contacted_at).slice(0,16).replace('T',' '))}</b> · ${esc(l.channel)} · <b>${esc(l.result_status)}</b>${l.items.length ? ' · ' + l.items.map(i => esc(i.species) + ' ' + esc(i.result)).join(', ') : ''}${l.memo ? `<br>${esc(l.memo)}` : ''}${l.staff_name ? ` <span class="note">(${esc(l.staff_name)})</span>` : ''}${sttBlock(l)}</li>`).join('')}</ul>`
       : '<p class="note">등록된 상담 기록 없음</p>')}
 
     ${helpAcc()}`);
@@ -1743,14 +1838,350 @@ async function saveApiLog(){
     if(s.value) body.items.push({mapping_id:+s.dataset.ares, result:s.value, insurance_id:s.dataset.ins ? +s.dataset.ins : null});
   });
   try{
+    const recFileEl = document.getElementById('r-rec'), recFile = recFileEl && recFileEl.files[0];
+    if(recFile && recFile.size > 25 * 1024 * 1024){ toast('녹음 파일은 25MB 이하만 올릴 수 있어요'); return; }
     const r = await apiPost(`/api/households/${householdId}/consult-logs`, body);
     if(apiSel !== householdId || apiData !== savedData || detailMode !== 'api') return;
     apiData.consult = r.consult;
     toast(`${apiData.household.owner_name} 상담 결과 저장 · ${status}`);
     if(window.Shell) Shell.reloadNoti();   // 상담 예약·가입 완료는 알림에 바로 보여요
     renderApiDetail();
+    if(recFile) runStt(householdId, r.log_id, recFile);   // 녹음은 저장된 상담 기록에 붙여서 STT
   }catch(e){ toast(`저장 실패 · 잠시 후 재시도 필요 · 오류코드: ${errCode(e)}`); }
 }
+
+/* ===== 통화 기록 창 (어가 상세) — 고객 상담 현황(consult_status.html)과 같은 창 =====
+   백엔드: /api/consult (consult.py) 의 STT · 녹음 · 고객 참고사항 API 를 그대로 써요.
+   다른 코드와 이름이 겹치지 않게 한 덩어리로 묶고, CallDlg.open(기록) 만 밖에서 써요. */
+const CallDlg = (() => {
+const CONSULT_API = API_BASE + '/api/consult';
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const errC = e => (typeof errCode === 'function' ? errCode(e) : (e && (e.code || e.status)) || 'APP');
+let onChange = () => {};
+async function getJSON(path){
+  const res = await fetch(CONSULT_API + path).catch(e => { throw Object.assign(e, {code:'NET'}); });
+  if(!res.ok) throw Object.assign(new Error(`${path} HTTP ${res.status}`), {code:res.status});
+  return res.json();
+}
+async function sendJSON(method, path, body){
+  const res = await fetch(CONSULT_API + path, {method, headers:{'Content-Type':'application/json', 'X-CSRF-Protection':'1'}, body:body == null ? undefined : JSON.stringify(body)})
+    .catch(e => { throw Object.assign(e, {code:'NET'}); });
+  if(!res.ok){
+    let msg = `${path} HTTP ${res.status}`;
+    try{ const j = await res.json(); if(j.detail) msg += ' · ' + (typeof j.detail === 'string' ? j.detail : JSON.stringify(j.detail)); }catch(e){}
+    throw Object.assign(new Error(msg), {code:res.status});
+  }
+  return res.status === 204 ? null : res.json().catch(() => null);
+}
+// 고객 참고사항: '참고사항 후보'를 추가하면 고객 상담 현황의 '고객 참고사항' 탭에도 보여요
+const memoCache = {};
+function loadMemos(code){
+  return getJSON(`/customers/${encodeURIComponent(code)}/memos`).then(list => { memoCache[code] = {list}; return list; });
+}
+async function createMemo(code, body){
+  const memo = await sendJSON('POST', `/customers/${encodeURIComponent(code)}/memos`, body);
+  (memoCache[code] = memoCache[code] || {list:[]}).list.unshift(memo || body);
+  return memo;
+}
+/* ===== 통화 기록 창 (녹음 듣기 + STT + AI 요약 + 참고사항 후보) =====
+   GET {API}/logs/{log_id}/stt → {dur, staff_name, audio_url, summary, lines:[[화자, 'm:ss', 말]], found:[{cat, txt}]}
+     화자 's' = 상담원 · 'c' = 어민 · 말 안의 [[ ]] = 중요한 말 강조 · cat = 연락 · 관심 · 경험 · 가족 · 소통
+   audio_url 이 있으면 녹음 파일을 재생하고 STT 줄을 시간에 맞춰 강조해요.
+   없으면 브라우저 음성 합성으로 대화를 읽어 줘요 (상담원·어민 목소리 높낮이를 다르게). */
+const callDlg = document.getElementById('call-dlg');
+const $c = id => document.getElementById(id);
+const secs = ts => { const [m, s] = String(ts).split(':').map(Number); return (m || 0) * 60 + (s || 0); };
+const synth = window.speechSynthesis;
+const audio = new Audio();
+audio.preload = 'metadata';
+let audioBroken = false;   // 이 통화의 녹음 파일을 못 받으면 true → 음성 합성으로 읽어 줘요
+// 녹음 재생 실패: 이유를 창에 보여 주고, 글 읽어 주기(음성 합성)로 바꿔서 이어 재생
+function audioFailed(err, from){
+  if(!curCall || audioBroken) return;
+  audioBroken = true;
+  const code = audio.error ? audio.error.code : null;   // 2 네트워크 · 3 디코딩 · 4 형식/주소(404 포함)
+  const why = err && err.status ? `서버에서 녹음을 받지 못했어요 (HTTP ${err.status}${err.message && !/^HTTP/.test(err.message) ? ' · ' + err.message : ''}).`
+    : err && err.code === 'NET' ? '서버에 연결하지 못해 녹음을 받지 못했어요.'
+    : err && err.name === 'NotAllowedError' ? '브라우저가 자동 재생을 막았어요. 재생 버튼을 한 번 더 눌러 주세요.'
+    : code === 4 ? '이 브라우저가 열 수 없는 녹음 형식이에요 (mp3 · m4a · wav 권장).'
+    : code === 3 ? '녹음 파일이 손상됐거나 읽을 수 없어요.'
+    : code === 2 ? '녹음 파일을 받는 중 연결이 끊겼어요.'
+    : '녹음 파일을 재생하지 못했어요.';
+  console.warn('녹음 재생 실패', curCall.audio_url, err, audio.error);
+  if(err && err.name === 'NotAllowedError'){ audioBroken = false; stopPlay(); $c('call-note').textContent = why; return; }
+  $c('call-note').textContent = `${why} 대신 글을 음성 합성으로 읽어 줘요.`;
+  if(playing){ playing = false; startPlay(from >= 0 ? from : 0); }
+}
+audio.addEventListener('error', () => { if(audio.getAttribute('src')) audioFailed(null, callIdx); });
+/* 녹음 받아 오기: <audio> 가 서버를 직접 부르면 실패 이유를 알 수 없어서,
+   고객 목록과 같은 방식(fetch)으로 받아 브라우저 안에서 재생해요. 실패하면 서버가 준 이유를 보여 줘요. */
+let audioObjUrl = null, audioReady = null;
+function releaseAudio(){
+  audio.pause(); audio.removeAttribute('src'); audio.load();
+  if(audioObjUrl){ URL.revokeObjectURL(audioObjUrl); audioObjUrl = null; }
+  audioReady = null;
+}
+function prepareAudio(k, req){
+  releaseAudio(); audioBroken = false;
+  if(!k.audio_url) return;
+  audioReady = (async () => {
+    const res = await fetch(new URL(k.audio_url, API_BASE).href)
+      .catch(e => { throw Object.assign(new Error('서버에 연결하지 못했어요'), {code:'NET'}); });
+    if(!res.ok){
+      let detail = '';
+      try{ const j = await res.json(); detail = typeof j.detail === 'string' ? j.detail : ''; }catch(e){}
+      throw Object.assign(new Error(detail || `HTTP ${res.status}`), {status:res.status});
+    }
+    const blob = await res.blob();
+    if(req !== callReq) return;   // 그 사이 다른 통화를 열었으면 버려요
+    audioObjUrl = URL.createObjectURL(blob);
+    audio.src = audioObjUrl; audio.load();
+  })();
+  audioReady.catch(e => { if(req === callReq) audioFailed(e, -1); });
+}
+let curCall = null, curHist = null, callIdx = 0, playing = false, callReturn = null, fallbackT = null, callReq = 0;
+
+// h = {log_id, code(어가 번호), name, region, species[], date, time, result, staff_name, stt_dur}
+async function openCall(h, opener){
+  const req = ++callReq;
+  curHist = h; curCall = null; callIdx = 0; callReturn = opener;
+  stopPlay();
+  $c('call-title').textContent = `${h.name} · ${h.species[0] || ''} 상담 통화`;
+  $c('call-sub').textContent = callSubText(h, null);
+  $c('call-lines').innerHTML = '<p class="note">통화 기록을 불러오는 중…</p>';
+  $c('call-sum').textContent = ''; $c('call-found').innerHTML = '';
+  $c('call-addall').disabled = true; $c('call-play').disabled = true; $c('call-stop').disabled = true;
+  $c('call-clock').textContent = ''; $c('call-note').textContent = ''; $c('call-track').style.width = '0';
+  if(!callDlg.open) callDlg.showModal();
+  try{
+    const [k] = await Promise.all([getJSON(`/logs/${encodeURIComponent(h.log_id)}/stt`), loadMemos(h.code).catch(() => null)]);
+    if(req !== callReq || !callDlg.open) return;
+    curCall = k;
+    $c('call-sub').textContent = callSubText(h, k);
+    $c('call-lines').innerHTML = (k.lines || []).map(([w, ts, x], i) => `<div class="cd-ln" data-li="${i}" title="이 부분부터 듣기"><span class="sp ${w === 's' ? 's' : 'c'}">${w === 's' ? '상담원' : '어민'}</span><span class="ts">${esc(ts)}</span><p>${esc(x).replace(/\[\[(.+?)\]\]/g, '<mark>$1</mark>')}</p></div>`).join('')
+      || '<p class="note">STT 기록이 비어 있어요.</p>';
+    $c('call-sum').textContent = k.summary || 'AI 요약이 아직 없어요.';
+    $c('call-note').textContent = k.audio_url ? '' : synth ? '녹음 파일이 없어 음성 합성으로 들려줘요' : '이 브라우저는 소리 재생을 지원하지 않아 글 강조만 움직여요';
+    prepareAudio(k, req);
+    $c('call-play').disabled = !(k.lines || []).length; $c('call-stop').disabled = false;
+    callIdx = -1; renderFound(); showLine(-1);
+    callDlg.querySelectorAll('.cd-col').forEach(el => { el.scrollTop = 0; });
+    $c('call-play').focus();
+  }catch(e){
+    if(req !== callReq) return;
+    $c('call-lines').innerHTML = `<p class="note">통화 기록을 불러오지 못했어요. 잠시 후 다시 시도해 주십시오. 오류코드: ${esc(errC(e))}</p>`;
+  }
+}
+function callSubText(h, k){
+  const staff = (k && k.staff_name) || h.staff_name;
+  return [`${h.date}${h.time ? ' ' + h.time : ''}`, h.region, staff && `상담자 ${staff}`, `결과 ${h.result}`, (k && k.dur || h.stt_dur) && `통화 ${(k && k.dur) || h.stt_dur}`].filter(Boolean).join(' · ');
+}
+const useAudio = () => !!(curCall && curCall.audio_url && !audioBroken);
+const fmtSec = s => { s = Math.max(0, Math.floor(s || 0)); return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`; };
+const totalSec = () => (useAudio() && isFinite(audio.duration) && audio.duration > 0) ? audio.duration : (secs(curCall.dur) || 1);
+// 지금 시각(초)에 해당하는 STT 줄
+const lineAt = t => { let i = -1; curCall.lines.forEach(([, ts], j) => { if(secs(ts) <= t + 0.05) i = j; }); return i; };
+// 줄 강조 (재생 막대와는 따로)
+function markLine(i, scroll){
+  callDlg.querySelectorAll('.cd-ln').forEach(el => el.classList.toggle('now', +el.dataset.li === i));
+  if(i >= 0 && scroll) callDlg.querySelector(`.cd-ln[data-li="${i}"]`)?.scrollIntoView({block:'nearest'});
+}
+// 재생 막대 · 시계
+function setProgress(t){
+  const total = totalSec();
+  $c('call-track').style.width = `${Math.min(100, Math.max(0, t / total * 100))}%`;
+  $c('call-clock').textContent = `${fmtSec(t)} / ${useAudio() && isFinite(audio.duration) ? fmtSec(audio.duration) : (curCall.dur || '–')}`;
+}
+// 음성 합성 · 처음 상태: 줄 단위로 막대를 옮겨요 (녹음 재생 때는 tick 이 초 단위로)
+function showLine(i){
+  const k = curCall; if(!k) return;
+  markLine(i, true);
+  setProgress(i < 0 ? 0 : secs(k.lines[i][1]));
+}
+// 녹음 재생 중: 화면 새로 그릴 때마다 재생 위치에 맞춰 막대를 계속 움직이고, 줄이 바뀔 때만 강조를 옮겨요
+let rafId = 0;
+function tick(){
+  if(!curCall || !useAudio()) return;
+  const t = audio.currentTime;
+  setProgress(t);
+  const i = lineAt(t);
+  if(i !== callIdx){ callIdx = i; markLine(i, true); }
+  if(playing) rafId = requestAnimationFrame(tick);
+}
+audio.addEventListener('timeupdate', () => { if(!playing && curCall && useAudio()) tick(); });   // 멈춘 상태에서 위치를 옮겼을 때
+audio.addEventListener('loadedmetadata', () => { if(curCall && useAudio() && !playing) setProgress(audio.currentTime); });
+audio.addEventListener('ended', () => { stopPlay(); setProgress(totalSec()); markLine(curCall.lines.length - 1, true); });
+const voiceKo = () => (synth?.getVoices() || []).find(v => v.lang && v.lang.startsWith('ko'));
+function speakFrom(i){
+  const k = curCall;
+  if(i >= k.lines.length){ stopPlay(); showLine(k.lines.length - 1); $c('call-track').style.width = '100%'; return; }
+  callIdx = i; showLine(i);
+  const [w, , x] = k.lines[i], text = x.replace(/\[\[|\]\]/g, '');
+  if(!synth){ fallbackT = setTimeout(() => playing && speakFrom(i + 1), 1500); return; }
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'ko-KR'; const v = voiceKo(); if(v) u.voice = v;
+  u.pitch = w === 's' ? 1.25 : 0.7; u.rate = w === 's' ? 1.05 : 0.9;
+  u.onend = () => { if(playing) speakFrom(i + 1); };
+  synth.speak(u);
+}
+// from = 줄 번호(그 줄부터) · null = 멈춘 곳부터 이어서
+function startPlay(from){
+  if(!curCall) return;
+  synth?.cancel(); clearTimeout(fallbackT); cancelAnimationFrame(rafId); playing = true;
+  $c('call-play').textContent = '❚❚'; $c('call-play').setAttribute('aria-label', '일시 정지');
+  if(useAudio()){
+    $c('call-bar').classList.add('live');
+    const seekTo = from != null ? (from > 0 ? secs(curCall.lines[from][1]) : 0) : audio.ended ? 0 : null;
+    if(seekTo != null) Promise.resolve(audioReady).then(() => { try{ audio.currentTime = seekTo; }catch(e){} }).catch(() => {});
+    Promise.resolve(audioReady).then(() => audio.play()).then(() => { if(playing) rafId = requestAnimationFrame(tick); })
+      .catch(err => audioFailed(err, from == null ? Math.max(0, lineAt(audio.currentTime)) : from));
+  }
+  else{
+    $c('call-bar').classList.remove('live');
+    speakFrom(from == null ? (callIdx < 0 || callIdx >= curCall.lines.length - 1 ? 0 : callIdx) : from);
+  }
+}
+function stopPlay(){
+  playing = false; synth?.cancel(); clearTimeout(fallbackT); cancelAnimationFrame(rafId); audio.pause();
+  $c('call-play').textContent = '▶'; $c('call-play').setAttribute('aria-label', '녹음 재생');
+}
+$c('call-play').onclick = () => playing ? stopPlay() : startPlay(null);
+$c('call-stop').onclick = () => { stopPlay(); callIdx = -1; try{ audio.currentTime = 0; }catch(e){} showLine(-1); };
+// 재생 막대를 누르면 그 위치로: 녹음은 그 초부터, 음성 합성은 가장 가까운 줄부터
+$c('call-bar').addEventListener('click', e => {
+  if(!curCall || !curCall.lines.length) return;
+  const r = $c('call-bar').getBoundingClientRect(), ratio = Math.min(1, Math.max(0, (e.clientX - r.left) / r.width));
+  if(useAudio()){
+    try{ audio.currentTime = ratio * totalSec(); }catch(err){}
+    setProgress(ratio * totalSec());
+    callIdx = lineAt(ratio * totalSec()); markLine(callIdx, true);
+    if(!playing) startPlay(null);
+  }else{
+    const i = Math.max(0, lineAt(ratio * totalSec()));
+    if(playing) startPlay(i); else{ callIdx = i; showLine(i); }
+  }
+});
+$c('call-lines').addEventListener('click', e => { const l = e.target.closest('[data-li]'); if(l) startPlay(+l.dataset.li); });
+
+// 참고사항 후보: AI가 통화에서 뽑은 것 · 맞는 것만 고객 참고사항에 추가
+function renderFound(){
+  const list = curCall.found || [], have = (memoCache[curHist.code] || {}).list || [];
+  const added = f => have.some(m => m.txt === f.txt);
+  $c('call-found').innerHTML = list.map((f, j) => `<li><span class="cat cat-${esc(f.cat)}">${esc(f.cat)}</span><span class="tx">${esc(f.txt)}</span>${added(f) ? '<span class="done">추가됨</span>' : `<button type="button" class="btn sm" data-f="${j}">추가</button>`}</li>`).join('')
+    || '<li><span class="note">이 통화에서 찾은 참고사항이 없어요.</span></li>';
+  $c('call-addall').disabled = !list.some(f => !added(f));
+}
+async function addFound(list){
+  const h = curHist, have = (memoCache[h.code] || {}).list || [];
+  const todo = list.filter(f => !have.some(m => m.txt === f.txt));
+  for(const f of todo) await createMemo(h.code, {cat:f.cat, txt:f.txt, src:'stt', log_id:h.log_id});
+  return todo.length;
+}
+$c('call-found').addEventListener('click', async e => {
+  const b = e.target.closest('[data-f]'); if(!b || b.disabled) return;
+  b.disabled = true;
+  try{ await addFound([curCall.found[+b.dataset.f]]); toast('고객 참고사항에 추가했어요'); }
+  catch(err){ toast(`추가하지 못했습니다. 오류코드: ${errC(err)}`); }
+  renderFound(); onChange();
+});
+$c('call-addall').onclick = async () => {
+  const b = $c('call-addall'); b.disabled = true;
+  try{ const n = await addFound(curCall.found || []); toast(`참고사항 ${n}개를 추가했어요`); }
+  catch(err){ toast(`일부를 추가하지 못했습니다. 오류코드: ${errC(err)}`); }
+  renderFound(); onChange();
+};
+const closeCall = () => callDlg.close();
+$c('call-x').onclick = closeCall; $c('call-close').onclick = closeCall;
+callDlg.addEventListener('click', e => { if(e.target === callDlg) closeCall(); });   // 바깥(어두운 곳)을 누르면 닫기
+callDlg.addEventListener('close', () => { callReq++; stopPlay(); releaseAudio(); if(callReturn && document.contains(callReturn)) callReturn.focus(); callReturn = null; });
+
+
+return {open:openCall, setOnChange(fn){ onChange = fn || (() => {}); }};
+})();
+
+/* ===== 상담 기록 · 통화 녹음(STT) =====
+   녹음 올리기: POST /api/consult/logs/{log_id}/recording (consult.py) → OpenAI STT + 요약 → consult_call_records
+   상담 기록 새로 받기: GET /api/households/{id}/consult (farm_detail.py · 기록마다 stt {status, dur, summary, error})
+   '통화 기록 보기'는 고객 상담 현황과 같은 창(CallDlg)을 열어요. */
+const recOpen = new Set();      // '전화 연결'을 누른 어가 → 결과 기록에 녹음 칸이 보여요
+const sttPending = new Set();   // 녹음을 올려 변환 중인 상담 기록 번호
+let sttUpTarget = null;
+function sttWhyText(err){
+  const e = String(err || '');
+  if(!e) return '실패 이유가 기록되지 않았어요. 다시 변환해 보세요.';
+  if(/api_key|OPENAI_API_KEY|Missing credentials|AuthenticationError|401|invalid_api_key|Incorrect API key/i.test(e)) return 'OpenAI API 키가 없거나 잘못됐어요. 서버의 OPENAI_API_KEY 설정을 확인해 주세요.';
+  if(/insufficient_quota|billing|exceeded your current quota/i.test(e)) return 'OpenAI 사용 한도나 결제가 막혀 있어요.';
+  if(/rate.?limit|429/i.test(e)) return '요청이 너무 많아 잠시 막혔어요. 1분 뒤 다시 변환해 보세요.';
+  if(/model_not_found|do not have access|does not exist/i.test(e)) return '이 API 키로 쓸 수 없는 모델이에요. 서버 모델 설정을 확인해 주세요.';
+  if(/No module named|ModuleNotFoundError/i.test(e)) return '서버에 openai 패키지가 없어요.';
+  if(/APIConnectionError|ConnectError|Timeout|timed out/i.test(e)) return '서버에서 OpenAI에 연결하지 못했어요.';
+  if(/Invalid file format|could not be decoded|unsupported/i.test(e)) return '녹음 파일을 읽지 못했어요. mp3 · m4a · wav 로 올려 주세요.';
+  return '변환 중 오류: ' + e.slice(0, 120);
+}
+function sttBlock(l){
+  const id = esc(l.log_id), s = l.stt;
+  if(sttPending.has(l.log_id)) return '<div class="aim"><span class="aim-tag">✨ AI 메모</span> <span class="note">녹음을 글로 바꾸는 중… (수십 초)</span></div>';
+  if(s && s.status === '완료') return `<div class="aim"><div class="aim-h"><span class="aim-tag">✨ AI 메모</span><span>통화 STT 기반 · 참고용</span></div>
+      <p class="aim-s">${esc(s.summary || '요약 없음')}</p>
+      <button type="button" class="hist-stt" style="margin-top:0" data-call-log="${id}">🎙 통화 기록 보기${s.dur ? ' · ' + esc(s.dur) : ''}</button></div>`;
+  if(s && s.status === '실패') return `<div class="hist-stt-row"><span class="hist-stt fail" title="${esc(s.error || '')}">STT 실패</span>
+      <button type="button" class="hist-up" data-stt-retry="${id}">다시 변환</button><button type="button" class="hist-up" data-stt-up="${id}">녹음 다시 올리기</button></div>
+      <p class="stt-why">${esc(sttWhyText(s.error))}</p>`;
+  if(s && (s.status === '대기' || s.status === '변환 중')) return '<div class="aim"><span class="note">녹음을 글로 바꾸는 중…</span></div>';
+  if(l.channel === '전화') return `<div><button type="button" class="hist-up" data-stt-up="${id}">🎙 녹음 올리기</button></div>`;
+  return '';
+}
+async function refreshConsult(householdId){
+  try{
+    const c = await apiGet(`/api/households/${householdId}/consult`);
+    if(apiData && apiData.household.household_id === householdId){ apiData.consult = c; renderApiDetail(); }
+  }catch(e){ console.warn('상담 기록 새로 받기 실패', e); }
+}
+async function runStt(householdId, logId, file){
+  if(sttPending.has(logId)) return;
+  sttPending.add(logId); openSecs.add('hist');
+  if(apiData && apiData.household.household_id === householdId) renderApiDetail();
+  toast(file ? '녹음을 올리고 AI가 글로 바꾸는 중이에요… (통화 길이에 따라 수십 초)' : '다시 변환하는 중이에요…');
+  let res = null;
+  try{
+    if(file){
+      const fd = new FormData(); fd.append('file', file);
+      const r = await fetch(`${API_BASE}/api/consult/logs/${encodeURIComponent(logId)}/recording`, {method:'POST', headers:{'X-CSRF-Protection':'1'}, body:fd})
+        .catch(e => { throw Object.assign(e, {code:'NET'}); });
+      const j = await r.json().catch(() => ({}));
+      if(!r.ok) throw Object.assign(new Error(typeof j.detail === 'string' ? j.detail : `HTTP ${r.status}`), {code:r.status});
+      res = j;
+    }else res = await apiPost(`/api/consult/logs/${encodeURIComponent(logId)}/stt/retry`, {});
+  }catch(e){
+    toast(`녹음을 처리하지 못했어요 · ${e.message || ''} · 오류코드: ${errCode(e)}`);
+  }finally{
+    sttPending.delete(logId);
+  }
+  await refreshConsult(householdId);
+  if(res && res.status === '완료'){
+    toast('AI 분석 완료 · 상담 기록에서 통화 기록을 볼 수 있어요');
+    openCallLog(logId);
+  }else if(res) toast(sttWhyText(res.error));
+}
+function openCallLog(logId, opener){
+  const D = apiData; if(!D) return;
+  const l = D.consult.logs.find(x => String(x.log_id) === String(logId)); if(!l) return;
+  const at = String(l.contacted_at);
+  CallDlg.open({log_id:l.log_id, code:String(D.household.household_id), name:D.household.owner_name,
+    region:D.household.sigungu || '', species:D.cards.map(c => c.standard_name || c.species), date:at.slice(0,10), time:at.slice(11,16),
+    result:l.result_status, staff_name:l.staff_name, stt_dur:l.stt && l.stt.dur}, opener);
+}
+document.getElementById('page-detail').addEventListener('click', e => {
+  const v = e.target.closest('[data-call-log]'); if(v){ openCallLog(v.dataset.callLog, v); return; }
+  const rt = e.target.closest('[data-stt-retry]'); if(rt && apiData){ runStt(apiData.household.household_id, +rt.dataset.sttRetry, null); return; }
+  const up = e.target.closest('[data-stt-up]'); if(up){ sttUpTarget = +up.dataset.sttUp; const f = document.getElementById('stt-file'); f.value = ''; f.click(); }
+});
+document.getElementById('stt-file').addEventListener('change', e => {
+  const file = e.target.files[0], id = sttUpTarget; sttUpTarget = null;
+  if(!file || id == null || !apiData) return;
+  if(file.size > 25 * 1024 * 1024){ toast('녹음 파일은 25MB 이하만 올릴 수 있어요'); return; }
+  runStt(apiData.household.household_id, id, file);
+});
 
 /* ===== 수온 예측 ===== */
 function renderForecast(){
@@ -2054,14 +2485,16 @@ detailEl.addEventListener('click', async e => {
   }
   if(a.dataset.act === 'call' && detailMode === 'api'){
     const H = apiData && apiData.household;
-    toast(`${H ? H.owner_name + (H.phone_masked ? ` (${H.phone_masked})` : '') : '어가'}에게 전화 연결 · 시연용 · 실제 전화 미연결`);
+    toast(`${H ? H.owner_name + (H.phone_masked ? ` (${H.phone_masked})` : '') : '어가'}에게 전화를 연결하고 있어요`);
     openSecs.add('record'); document.getElementById('acc-record').open = true;
+    if(H) recOpen.add(H.household_id);
+    const rw = document.getElementById('r-rec-wrap'); if(rw) rw.hidden = false;
     document.getElementById('r-status').focus();
     return;
   }
   const f = farms.find(x => x.id === selected); if(!f) return;   // 가상 예시 어가
   if(a.dataset.act === 'call'){
-    toast(`${f.name} (${f.phone})에게 전화 연결 · 시연용 · 실제 전화 미연결`);
+    toast(`${f.name} (${f.phone})에게 전화를 연결하고 있어요`);
     openSecs.add('record'); document.getElementById('acc-record').open = true;
     document.getElementById('r-status').focus();
   }
