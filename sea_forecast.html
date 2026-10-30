@@ -393,7 +393,7 @@
             <span class="th" id="fc-th"><i></i>기준선 25℃ · 28℃</span>
           </div>
           <div class="chart-box" id="fc-box">
-            <div class="chart" id="fc-chart"><div class="empty">불러오는 중이에요…</div></div>
+            <div class="chart" id="fc-chart"><div class="empty">조회 중…</div></div>
             <div class="ttip" id="fc-tip" role="tooltip" hidden></div>
           </div>
         </section>
@@ -422,7 +422,7 @@
       </section>
     </section>
     <p class="foot">
-      <span id="fc-foot-rule">위험 단계는 앱 기준(관심 25℃ · 주의 28℃ · 경보 28℃ 이상 3일)으로 판정한 참고값이며,</span> 공식 특보나 보험금 지급 기준이 아닙니다(Weather data by Open-Meteo.com).<br>
+      <span id="fc-foot-rule">위험 단계는 앱 기준(관심 25℃ · 주의 28℃ · 경보 28℃ 이상 3일)으로 판정한 참고값 ·</span> 공식 특보·보험금 지급 기준 아님 (Weather data by Open-Meteo.com).<br>
       문의 · 수협중앙회 경남지역본부 <a href="tel:0552891124">055-289-1124</a> · 수협은행 경남지역본부 <a href="tel:0556030466">055-603-0466</a>
     </p>
   </main>
@@ -473,8 +473,8 @@ function setMode(ok, err){
   document.getElementById('data-mode').textContent = ok ? 'DB 연결됨' : '가상 데이터 · 서버 연결 실패';
   document.getElementById('updated').textContent = ok ? `마지막 조회 ${Shell.lastViewed()}` : '2026.10.22 (목) 06:00 기준';
   if(!ok) addNotice(location.protocol === 'file:'
-    ? '⚠️ 파일로 열면 서버에 연결할 수 없어 가상 데이터를 보여 주고 있어요. sea_temperature 폴더에서 python -m http.server 8765 를 켜고 http://localhost:8765/sea_forecast.html 로 열어 주세요.'
-    : `⚠️ 서버에 연결하지 못해 예시 데이터를 보여 드립니다. 잠시 후 새로고침해 주십시오. 오류코드: ${errCode(err)}`);
+    ? '⚠️ 파일로 열어 서버 연결 불가 · 가상 데이터 표시 중. sea_temperature 폴더에서 python -m http.server 8765 실행 후 http://localhost:8765/sea_forecast.html 로 접속 필요'
+    : `⚠️ 서버 연결 실패 · 예시 데이터 표시 중 · 잠시 후 새로고침 필요 · 오류코드: ${errCode(err)}`);
 }
 
 /* ===== 기본 값 ===== */
@@ -742,8 +742,8 @@ function renderSeasonText(){
     ? `<li><span>관심 (예비특보 수준)</span><b>25℃ 도달 예상</b></li><li><span>주의 (주의보 수준)</span><b>28℃ 도달 예상</b></li><li><span>경보</span><b>28℃ 이상 3일 연속</b></li>`
     : `<li><span>관심 (저수온 예비특보 수준)</span><b>7℃ 도달 예상</b></li><li><span>주의 (저수온 주의보 수준)</span><b>4℃ 도달 예상</b></li><li><span>경보</span><b>4℃ 이하 3일 연속</b></li>`;
   document.getElementById('fc-foot-rule').textContent = R.hot
-    ? '위험 단계는 앱 기준(관심 25℃ · 주의 28℃ · 경보 28℃ 이상 3일)으로 판정한 참고값이며,'
-    : '위험 단계는 저수온 앱 기준(관심 7℃ · 주의 4℃ · 경보 4℃ 이하 3일, 일최저 수온 · 수과원 저수온 특보 기준)으로 판정한 참고값이며,';
+    ? '위험 단계는 앱 기준(관심 25℃ · 주의 28℃ · 경보 28℃ 이상 3일)으로 판정한 참고값 ·'
+    : '위험 단계는 저수온 앱 기준(관심 7℃ · 주의 4℃ · 경보 4℃ 이하 3일, 일최저 수온 · 수과원 저수온 특보 기준)으로 판정한 참고값 ·';
 }
 function renderForecastSide(I){
   const pts = I.series;
@@ -775,7 +775,7 @@ function renderForecastSide(I){
     return `<div class="sig-row"><h4><i class="l${lvCls(lv)}" aria-hidden="true"></i>${label} ${rows.length}<small>${(R.hot ? SIGNAL_RULE : SIGNAL_RULE_COLD)[lv]}</small></h4>`
       + (rows.length ? `<ul class="sig-list" aria-label="${label}">${rows.map(chip).join('')}</ul>` : '<p class="sig-none">해당 어종 없음</p>')
       + '</div>';
-  }).join('') + (R.hot ? '' : `<p class="sig-note">어종 기준: 수협 수산경제연구원(2026.1) 현장 조사 정리값 · ${COLD_NO_DATA}은 자료가 없어 지역 단계(7℃·4℃)만 봐 주세요</p>`);
+  }).join('') + (R.hot ? '' : `<p class="sig-note">어종 기준: 수협 수산경제연구원(2026.1) 현장 조사 정리값 · ${COLD_NO_DATA}은 자료 없음 · 지역 단계(7℃·4℃) 기준 확인</p>`);
 
   // ref = 8~21일 표: 같은 기준으로 단계를 보여 주되 '참고'로 표시
   const table = (rows, ref) => `<div class="tbl-wrap"><table><thead><tr><th>날짜</th><th>${ref?'단계(참고)':'단계'}</th><th class="num">최고℃</th><th class="num">평균℃</th><th class="num">최저℃</th></tr></thead><tbody>${
@@ -848,10 +848,10 @@ document.getElementById('office').addEventListener('change', e => {
    → /api/dashboard/regions 가 이미 주는 값. 관측 지점 상태만 화면에 적어 둠(roms_regions.status · note 와 같은 내용) */
 const BIAS_MID = 1, BIAS_BIG = 2;   // 보정값 크기(℃): 1 미만 회색 · 1~2 노랑 · 2 이상 빨강(경고)
 const STATION = {'통영':['통영 영운','확정'], '거제':['거제 가배','확정'], '남해':['남해 강진','확정'],
-                 '고성':['통영 풍화','임시','고성 안에 관측소가 없어 인접 관측소를 써요'],
-                 '하동':['남해 강진','임시','하동 안에 관측소가 없어 인접 관측소를 써요'],
-                 '창원':['진해 잠도','확인 필요','관측소 코드·수심을 확인 중이에요'],
-                 '사천':['남해 강진 좌표','확인 필요','비토1 관측소 좌표가 아직 없어 임시 좌표를 써요']};
+                 '고성':['통영 풍화','임시','고성 내 관측소 없음 · 인접 관측소 사용'],
+                 '하동':['남해 강진','임시','하동 내 관측소 없음 · 인접 관측소 사용'],
+                 '창원':['진해 잠도','확인 필요','관측소 코드·수심 확인 중'],
+                 '사천':['남해 강진 좌표','확인 필요','비토1 관측소 좌표 미확보 · 임시 좌표 사용']};
 function biasInfo(I){
   const b = I.bias || {}, d = b.diff;
   if(d == null) return null;
@@ -868,16 +868,16 @@ function openBias(){
   const I = regionInfo[fcRegion]; if(!I) return;
   const B = biasInfo(I), st = STATION[I.id] || ['–', '확인 필요'];
   const e = I.series.find(p => p.src === 'ECMWF');
-  const body = !B ? '<p>이 지역은 보정값이 없어 8~21일 ECMWF 예측을 그대로 보여 줘요.</p>' : `
+  const body = !B ? '<p>이 지역은 보정값 없음 · 8~21일 ECMWF 예측 그대로 표시</p>' : `
     <div class="bm-tiles">
       <div class="bm-tile${B.big ? ' big' : B.mid ? ' mid' : ''}"><div class="k">이 지역 보정값</div><div class="v">${B.up ? '+' : '−'}${B.a}℃</div>
-        <div class="s">ECMWF가 ROMS보다 ${B.a}℃ ${B.up ? '낮게' : '높게'} 나와서, 8~21일 값을 ${B.a}℃ ${B.up ? '올려' : '낮춰'} 보여 줘요</div></div>
+        <div class="s">ECMWF가 ROMS보다 ${B.a}℃ ${B.up ? '낮게' : '높게'} 나와 8~21일 값을 ${B.a}℃ ${B.up ? '올려' : '낮춰'} 표시</div></div>
       <div class="bm-tile"><div class="k">계산 기준</div><div class="v sm">${B.own ? '이 지역 1~7일 비교' : '7개 지역 평균 사용'}</div>
-        <div class="s">${B.own ? '겹치는 7일 동안 두 예측의 차이로 직접 계산했어요' : '이 지역 비교 자료가 부족해 다른 지역 평균을 썼어요 · 흐름만 참고'}</div></div>
+        <div class="s">${B.own ? '겹치는 7일간 두 예측의 차이로 직접 계산' : '이 지역 비교 자료 부족 · 다른 지역 평균 적용 · 흐름만 참고'}</div></div>
       <div class="bm-tile"><div class="k">기준 관측 지점</div><div class="v sm">${esc(st[0])} <span class="bm-tag ${st[1] === '확정' ? 'ok' : 'ref'}">${esc(st[1])}</span></div>
-        <div class="s">${esc(st[2] || 'ROMS 값을 뽑는 기준 지점이에요')}</div></div>
+        <div class="s">${esc(st[2] || 'ROMS 값 추출 기준 지점')}</div></div>
     </div>
-    ${B.big ? `<p class="bm-warn">⚠ 보정값이 ${B.a}℃로 커요(2℃ 이상). 8~21일 값은 오차가 클 수 있어 흐름만 참고하세요${Math.abs(B.d) >= 3 ? ' · 3℃ 이상이면 ECMWF 격자가 육지 가장자리에 걸렸을 수 있어요' : ''}.</p>` : ''}
+    ${B.big ? `<p class="bm-warn">⚠ 보정값 ${B.a}℃로 큼(2℃ 이상) · 8~21일 값은 오차가 클 수 있어 흐름만 참고${Math.abs(B.d) >= 3 ? ' · 3℃ 이상은 ECMWF 격자가 육지 가장자리에 걸렸을 가능성 있음' : ''}</p>` : ''}
     ${e ? `<p class="bm-ex">예) ${mdw(e.i)} 일${R.val} &nbsp;ECMWF 원래 ${(e[R.key] + B.d).toFixed(1)}℃ → 보정 ${B.up ? '+' : '−'}${B.a}℃ → <b>화면 표시 ${e[R.key].toFixed(1)}℃</b></p>` : ''}`;
   document.getElementById('bias-modal-title').textContent = `${I.id} · 8~21일 보정값`;
   document.getElementById('bias-modal-body').innerHTML = body;

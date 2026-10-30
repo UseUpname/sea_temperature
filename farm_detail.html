@@ -442,7 +442,7 @@
           <div class="list-h">
             <div class="sec-h" style="margin:0">
               <h3 id="h-list">연락 순서</h3>
-              <p>어가를 누르면 상세로 이동해요 · 체크하면 오른쪽에서 문자를 한 번에 보내요</p>
+              <p>어가 클릭 시 상세 이동 · 체크 시 오른쪽에서 일괄 문자 발송</p>
             </div>
             <div class="filters" id="filters" role="group" aria-label="목록 거르기"></div>
           </div>
@@ -457,11 +457,11 @@
               <tbody id="rows"></tbody>
             </table>
           </div>
-          <div class="empty" id="empty" hidden>조건에 맞는 어가가 없어요.</div>
+          <div class="empty" id="empty" hidden>조건에 해당하는 어가 없음</div>
         </section>
 
         <aside class="panel" id="bulk-panel" aria-labelledby="h-bulk">
-          <div class="list-h"><div class="sec-h" style="margin:0"><h3 id="h-bulk">일괄 안내 문자</h3><p>목록에서 체크한 어가에 한 번에 보내요</p></div></div>
+          <div class="list-h"><div class="sec-h" style="margin:0"><h3 id="h-bulk">일괄 안내 문자</h3><p>목록에서 체크한 어가에 일괄 발송</p></div></div>
           <div class="panel-in bp">
             <div class="bp-count" id="bulk-n"></div>
             <div class="bp-picked" id="bulk-picked"></div>
@@ -470,7 +470,7 @@
             <textarea id="bulk-preview" aria-label="일괄 문자 내용"></textarea>
             <p class="note" id="bulk-note"></p>
             <button type="button" class="btn pri full" id="bulk-sms" disabled>✉️ 선택한 어가에 일괄 발송</button>
-            <p class="note">수신 미동의 어가는 자동으로 빠지고 전화 목록에 남아요 · 시연이라 실제로 발송되지 않아요</p>
+            <p class="note">수신 미동의 어가는 발송 제외 · 전화 목록에 유지 · 시연용 · 실제 문자 미발송</p>
           </div>
         </aside>
       </div>
@@ -489,7 +489,7 @@
 
     <!-- ===== 수온 예측 ===== -->
     <section id="page-forecast" data-page-section="forecast" hidden>
-      <div class="page-h"><h2>수온 예측</h2><p>담당 지역 기준 · 지역은 맨 위 '담당'에서 바꿔요 · 1~7일은 대응 판단, 8~21일은 흐름 참고만 해요</p></div>
+      <div class="page-h"><h2>수온 예측</h2><p>담당 지역 기준 · 지역 변경은 상단 '담당'에서 · 1~7일 대응 판단, 8~21일 흐름 참고용</p></div>
       <div class="fc-grid">
         <section class="panel panel-in" aria-labelledby="h-fc">
           <div class="sec-h"><h3 id="h-fc">21일 수온 추이</h3><p id="fc-sub"></p></div>
@@ -500,7 +500,7 @@
           </div>
           <div class="chart" id="fc-chart"></div>
           <div class="pick" id="fc-pick" aria-live="polite"></div>
-          <p class="note" style="margin-top:8px">ECMWF 보정값으로는 위험 단계·연락 대상·보험금 지급 여부를 판단하지 않아요. ROMS도 관측값이 아닌 모델 예측값이에요.</p>
+          <p class="note" style="margin-top:8px">ECMWF 보정값은 위험 단계·연락 대상·보험금 지급 여부 판단에 미사용 · ROMS도 관측값이 아닌 모델 예측값</p>
         </section>
         <div class="fc-side">
           <section class="panel panel-in" aria-labelledby="h-fcs">
@@ -514,10 +514,10 @@
               <li><span>주의 (주의보 수준)</span><b>28℃ 도달 예상</b></li>
               <li><span>경보</span><b>28℃ 이상 3일 연속</b></li>
             </ul>
-            <p class="note" style="margin-top:8px">예보값에 적용한 앱 자체 판정이에요. 공식 특보는 수과원 발표로 확인하세요.</p>
+            <p class="note" style="margin-top:8px">예보값 기준 앱 자체 판정 · 공식 특보는 수과원 발표 확인 필요</p>
             <div class="sec-h" style="margin-top:14px"><h3>어종별 견디는 한계 수온</h3></div>
             <ul class="mini" id="fc-species"></ul>
-            <p class="note" style="margin-top:8px">국립수산과학원(2024.7.19) 자료. 그 밖의 어종은 자료를 확보하면 추가해요.</p>
+            <p class="note" style="margin-top:8px">국립수산과학원(2024.7.19) 자료. 그 밖의 어종은 자료 확보 후 추가 예정</p>
           </section>
         </div>
       </div>
@@ -529,7 +529,7 @@
 
     <!-- ===== 고객 상담 현황 ===== -->
     <section id="page-consult" data-page-section="consult" hidden>
-      <div class="page-h"><h2>고객 상담 현황</h2><p>상담 홈에서 저장한 결과가 바로 쌓여요</p></div>
+      <div class="page-h"><h2>고객 상담 현황</h2><p>상담 홈에서 저장한 결과 즉시 반영</p></div>
       <div class="search">
         <label for="q">검색</label>
         <input id="q" type="search" placeholder="이름, 전화번호 뒷자리, 어종 (예: 김, 1203, 조피볼락)" autocomplete="off">
@@ -537,7 +537,7 @@
       </div>
       <div class="stack">
         <section class="panel" aria-labelledby="h-cust">
-          <div class="list-h"><div class="sec-h" style="margin:0"><h3 id="h-cust">고객 목록</h3><p>고객을 누르면 아래 상담 내역이 그 고객만 보여요</p></div></div>
+          <div class="list-h"><div class="sec-h" style="margin:0"><h3 id="h-cust">고객 목록</h3><p>고객 클릭 시 해당 고객 상담 내역만 표시</p></div></div>
           <div class="tbl-wrap">
             <table>
               <thead><tr>
@@ -547,7 +547,7 @@
               <tbody id="cust-rows"></tbody>
             </table>
           </div>
-          <div class="empty" id="cust-empty" hidden>검색 결과가 없어요. 이름 한 글자나 전화번호 뒷자리로 찾아보세요.</div>
+          <div class="empty" id="cust-empty" hidden>검색 결과 없음 · 이름 한 글자 또는 전화번호 뒷자리로 검색 가능</div>
         </section>
         <section class="panel" aria-labelledby="h-hist">
           <div class="list-h">
@@ -560,13 +560,13 @@
               <tbody id="hist-rows"></tbody>
             </table>
           </div>
-          <div class="empty" id="hist-empty" hidden>상담 내역이 없어요.</div>
+          <div class="empty" id="hist-empty" hidden>등록된 상담 내역 없음</div>
         </section>
       </div>
     </section>
 
     <p class="foot">
-      위험 단계는 앱 기준(관심 25℃ · 주의 28℃ · 경보 28℃ 이상 3일)으로 판정한 참고값이며, 공식 특보나 보험금 지급 기준이 아닙니다(Weather data by Open-Meteo.com).<br>
+      위험 단계는 앱 기준(관심 25℃ · 주의 28℃ · 경보 28℃ 이상 3일)으로 판정한 참고값 · 공식 특보·보험금 지급 기준 아님 (Weather data by Open-Meteo.com).<br>
       문의 · 수협중앙회 경남지역본부 <a href="tel:0552891124">055-289-1124</a> · 수협은행 경남지역본부 <a href="tel:0556030466">055-603-0466</a>
     </p>
   </main>
@@ -622,8 +622,8 @@ function setMode(ok, err){
   document.getElementById('updated').textContent = ok ? `마지막 조회 ${Shell.lastViewed()}` : '2026.10.22 (목) 06:00 기준';
   document.getElementById('reset').hidden = ok;   // 홈과 같이 가상 데이터일 때만 보여요
   if(!ok) addNotice(location.protocol === 'file:'
-    ? '⚠️ 파일로 열면 서버에 연결할 수 없어 가상 데이터를 보여 주고 있어요. sea_temperature 폴더에서 python -m http.server 8765 를 켜고 http://localhost:8765/farm_detail.html 로 열어 주세요.'
-    : `⚠️ 서버에 연결하지 못해 예시 데이터를 보여 드립니다. 잠시 후 새로고침해 주십시오. 오류코드: ${errCode(err)}`);
+    ? '⚠️ 파일로 열어 서버 연결 불가 · 가상 데이터 표시 중. sea_temperature 폴더에서 python -m http.server 8765 실행 후 http://localhost:8765/farm_detail.html 로 접속 필요'
+    : `⚠️ 서버 연결 실패 · 예시 데이터 표시 중 · 잠시 후 새로고침 필요 · 오류코드: ${errCode(err)}`);
 }
 
 /* ===== 기본 값 ===== */
@@ -686,7 +686,7 @@ function applyRegions(data){
   data.regions.forEach(region => {
     const series = region.series.slice().sort((a,b) => a.i - b.i);
     const t = series.filter(point => point.src === 'ROMS').map(point => point[MR.key]);   // 고수온 = 일최고 · 저수온 = 일최저
-    if(!t.length) throw new Error(`지역 수온 자료가 없습니다: ${region.id}`);
+    if(!t.length) throw new Error(`지역 수온 자료 없음: ${region.id}`);
     const st = t.map((value,i,values) => stageOfDay(value,i,values));
     const top = Math.max(...st), maxT = MR.hot ? Math.max(...t) : Math.min(...t);   // 7일 중 가장 위험한 값
     regionInfo[region.id] = {...region,t,series,st,top,d:st.indexOf(top),maxT,dMax:t.indexOf(maxT)};
@@ -702,7 +702,7 @@ const SPECIES_LIMIT = Shell.M.limits;   // 모드별 어종 기준 수온 (shell
 const PRODUCTS = {
   unknown:{name:'상품 확인 필요', heat:null, months:[], saleText:'확인 필요'},
   cage:   {name:'해상가두리어류 재해보험', heat:'rider', base:'태풍·해일·풍랑·적조', rider:'고수온·저수온·이상수질', months:[1,2,3,4,5,10,11,12], saleText:'1~5·10~12월', subsidy:'일부', split4:true},
-  ascid:  {name:'멍게 보험', heat:'rider', months:[4,5,6,7,8,9,10], saleText:'4~10월', subsidy:'일부', split4:false, caution:'멍게는 상품요약서와 약관(제5조)의 고수온 보장 내용이 달라요. 약관 우선, 수협에 확인 필요'},
+  ascid:  {name:'멍게 보험', heat:'rider', months:[4,5,6,7,8,9,10], saleText:'4~10월', subsidy:'일부', split4:false, caution:'멍게는 상품요약서와 약관(제5조)의 고수온 보장 내용 상이 · 약관 우선, 수협 확인 필요'},
   abaSea: {name:'해상 전복 보험', heat:'base', months:[1,2,3,4,5,10,11,12], saleText:'1~5·10~12월', subsidy:'50%', split4:true},
   abaLand:{name:'육상수조식 전복 보험', heat:'rider', months:[1,2,3,4,5,10,11,12], saleText:'1~5·10~12월', subsidy:'일부', split4:false},
   sqrt:   {name:'오만둥이 보험', heat:'base', months:[7,8,9,10,11], saleText:'7~11월', subsidy:'일부', split4:false},
@@ -781,7 +781,7 @@ function toFarms(customers){
   return customers.map(customer => {
     const householdId = Number(customer.code);
     if(!Number.isSafeInteger(householdId) || householdId <= 0 || !Object.hasOwn(statusKeys, customer.status)){
-      throw new Error('어가 번호 또는 상담 상태를 확인해 주세요.');
+      throw new Error('어가 번호 또는 상담 상태 확인 필요');
     }
     return {
       id:String(householdId), household_id:householdId,
@@ -790,7 +790,7 @@ function toFarms(customers){
       status:statusKeys[customer.status], next:null, hist:[],
       items:customer.contracts.map(contract => {
         if(!Object.hasOwn(coverageKeys, contract.coverage)){
-          throw new Error('어가 보험 보장 상태를 확인해 주세요.');
+          throw new Error('어가 보험 보장 상태 확인 필요');
         }
         return {
           species:contract.species, ins:coverageKeys[contract.coverage],
@@ -811,7 +811,7 @@ async function loadFarms(){
   const miss = [...new Set(farms.filter(f => !regionInfo[f.region]).map(f => f.region))];
   if(miss.length){
     farms = farms.filter(f => regionInfo[f.region]);
-    addNotice(`⚠️ 수온 예측이 없는 지역이라 목록에서 뺀 어가가 있어요: ${miss.join(', ')}`);
+    addNotice(`⚠️ 수온 예측이 없는 지역 어가는 목록에서 제외: ${miss.join(', ')}`);
   }
 }
 
@@ -911,19 +911,19 @@ function heatLine(f){
 
 function talkingPoints(f){
   const r = regionInfo[f.region], sale = saleState(f.p), P = PRODUCTS[f.p], pts = [];
-  if(sale.code === 'unknown') pts.push({key:true, t:'보험 상품·양식 방식·판매 기간을 확인한 뒤 가입 가능 여부를 안내하세요.'});
+  if(sale.code === 'unknown') pts.push({key:true, t:'보험 상품·양식 방식·판매 기간 확인 후 가입 가능 여부 안내'});
   if(f.ins === 'none' || f.ins === 'unknown' || f.ins === 'norider'){
-    if(r.alert) pts.push({key:true, t:`${r.alert.type}가 이미 발령(${r.alert.since})돼서 지금 가입해도 이번 고수온 피해는 보상되지 않아요 → 대응 요령 안내 후 다음 판매 기간 가입을 권해요`});
-    else if(sale.code !== 'later') pts.push({key:true, t:'첫 보험료를 낸 날 이미 특보가 난 지역은 그 재해를 보상하지 않아요 → 특보 전에 가입해야 해요'});
+    if(r.alert) pts.push({key:true, t:`${r.alert.type} 이미 발령(${r.alert.since}) · 지금 가입해도 이번 고수온 피해 보상 불가 → 대응 요령 안내 후 다음 판매 기간 가입 권유`});
+    else if(sale.code !== 'later') pts.push({key:true, t:'첫 보험료 납입일에 이미 특보가 발령된 지역은 해당 재해 보상 제외 → 특보 전 가입 필요'});
   }
   if(f.ins === 'none' || f.ins === 'unknown'){
     pts.push({t:'입식 후 20일 안에 품종·수량을 신고했는지 확인 (안 하면 재난지원금·양식보험 가입 불가)', need:true});
   }
-  if(f.ins === 'unknown') pts.unshift({key:true, t:'가입 여부부터 확인 · 다른 조합에서 가입했을 수도 있어요'});
-  if(P.heat === 'rider' && f.ins !== 'full') pts.push({t:'고수온은 기본 보험만으로는 보장되지 않아요 · 특약을 함께 넣어야 해요'});
+  if(f.ins === 'unknown') pts.unshift({key:true, t:'가입 여부부터 확인 · 타 조합 가입 가능성 있음'});
+  if(P.heat === 'rider' && f.ins !== 'full') pts.push({t:'고수온은 기본 보험만으로 보장 안 됨 · 특약 함께 가입 필요'});
   if(P.heat === 'base' && f.ins === 'checkExcl') pts.push({key:true, t:'보험료를 줄이려고 고수온을 빼는 특약(부담보)을 넣었는지 증권으로 확인'});
-  if(sale.code === 'soon') pts.push({key:true, t:`이 상품은 ${sale.end}월까지만 가입할 수 있어요`});
-  if(sale.code === 'later') pts.push({t:`${sale.start}월에 판매가 시작돼요 · 시작 주에 바로 연락하도록 예약`});
+  if(sale.code === 'soon') pts.push({key:true, t:`이 상품은 ${sale.end}월까지만 가입 가능`});
+  if(sale.code === 'later') pts.push({t:`${sale.start}월 판매 시작 · 시작 주에 바로 연락하도록 예약`});
   if(f.ins === 'full' || r.top >= 2) pts.push({t:'경보가 나면 먹이 주기 중단, 선별·분조 금지 (약관상 의무)'});
   if(r.top >= 2 || r.alert) pts.push({t:'액화산소 등 대응 장비 점검 안내', need:true});
   if(P.caution) pts.push({key:true, t:P.caution});
@@ -933,12 +933,12 @@ function talkingPoints(f){
 function checkGuide(f){
   const sale = saleState(f.p);
   if(f.ins === 'none') return sale.code === 'later'
-    ? `판매 시작(${sale.start}월) 시기를 안내하고, 시작 주에 상담을 예약하세요.`
-    : '특보 발령 전, 판매 기한과 인수 조건을 확인하고 가입 의향을 물어보세요.';
-  if(f.ins === 'norider') return '가입한 보험에 고수온 특약이 없어요. 특약을 더할 수 있는지와 가입 의향을 확인하세요.';
-  if(f.ins === 'checkExcl') return '증권에서 고수온을 뺀 특약(부담보)이 있는지 확인하세요.';
-  if(f.ins === 'unknown') return '보험 가입 여부와 입식신고 여부부터 확인하세요.';
-  return '경보 때 지켜야 할 의무를 안내하고, 피해가 보이면 바로 알리도록 하세요.';
+    ? `판매 시작(${sale.start}월) 시기 안내 · 시작 주 상담 예약`
+    : '특보 발령 전 판매 기한·인수 조건 확인 후 가입 의향 확인';
+  if(f.ins === 'norider') return '가입 보험에 고수온 특약 없음 · 특약 추가 가능 여부와 가입 의향 확인';
+  if(f.ins === 'checkExcl') return '증권에서 고수온 제외 특약(부담보) 여부 확인';
+  if(f.ins === 'unknown') return '보험 가입 여부와 입식신고 여부부터 확인';
+  return '경보 시 준수 의무 안내 · 피해 발견 시 즉시 신고 안내';
 }
 
 // 예시 문장. 예상 부담은 보험료 칸에 견적을 넣으면 채워짐.
@@ -1089,7 +1089,7 @@ function renderRows(){
 }
 function updateBulkLen(){
   const b = bytes(bulkText);
-  document.getElementById('bulk-note').textContent = `선택한 어가 모두에게 같은 내용이 가요 · 고쳐 쓸 수 있어요 · [○○수협]·[수협 전화]는 발송 때 실제 값으로 바뀌어요 · ${b}바이트 ${b > 90 ? '장문(LMS)' : '단문(SMS)'}`;
+  document.getElementById('bulk-note').textContent = `선택 어가 전체에 동일 문구 발송 · 문자 내용 수정 가능 · [○○수협]·[수협 전화]는 발송 시 실제 값으로 치환 · ${b}바이트 ${b > 90 ? '장문(LMS)' : '단문(SMS)'}`;
 }
 function renderBulk(rows){
   rows = rows || sorted().filter(pass);
@@ -1097,7 +1097,7 @@ function renderBulk(rows){
   const ok = pf.filter(f => f.consent);
   document.getElementById('bulk-n').innerHTML = pf.length
     ? `선택 <b>${pf.length}</b>곳 · 문자 가능 <b>${ok.length}</b>곳`
-    : '선택한 어가가 없어요';
+    : '선택된 어가 없음';
   document.getElementById('bulk-picked').innerHTML = pf.map(f =>
     `<button type="button" class="${f.consent ? '' : 'no'}" data-unpick="${f.id}" aria-label="${esc(f.name)} 선택 해제">${esc(f.name)}${f.consent ? '' : ' · 미동의'} ✕</button>`).join('');
   document.getElementById('bulk-tpl').innerHTML = Object.entries(BULK_TPL)
@@ -1165,7 +1165,7 @@ function renderPicker(){
   if(!apiOk) return;
   const mockF = farms.find(x => x.id === selected);
   const mockOpt = detailMode === 'mock' && mockF ? `<option value="" selected>가상 예시 · ${esc(mockF.name)} (${mockF.id})</option>` : '';
-  const emptyOpt = detailMode === 'api' && apiSel == null ? '<option value="" selected>어가를 선택해 주세요</option>' : '';
+  const emptyOpt = detailMode === 'api' && apiSel == null ? '<option value="" selected>어가 선택</option>' : '';
   sel.innerHTML = mockOpt + emptyOpt + regionHouseholds().map(h => `<option value="${h.household_id}" ${detailMode === 'api' && apiSel === h.household_id ? 'selected' : ''}>${esc(h.owner_name)} · ${esc(h.household_name)} (${esc(h.region || '-')}${h.species.length ? ' · ' + esc(h.species.join(', ')) : ''})</option>`).join('');
 }
 
@@ -1173,7 +1173,7 @@ function renderPicker(){
 function renderMockBrief(){
   renderPicker();
   const f = farms.find(x => x.id === selected);
-  if(!f){ briefBoxes(`<div class="empty">어가를 찾을 수 없어요${selected ? ` (${esc(selected)})` : ''}. <a class="linkish" href="consult_home.html">연락 목록에서 고르기 →</a></div>`, ''); return; }
+  if(!f){ briefBoxes(`<div class="empty">해당 어가 없음${selected ? ` (${esc(selected)})` : ''} · <a class="linkish" href="consult_home.html">연락 목록에서 선택 →</a></div>`, ''); return; }
   const xs = items(f).sort(byUrgent), L0 = xs[0], I = regionInfo[f.region], st = fStage(f), sp = speciesRisk(L0);
   // 확인 사항: 가장 급한 계약 기준 + 나머지 계약은 한 줄씩
   const points = talkingPoints(L0).slice();
@@ -1186,8 +1186,8 @@ function renderMockBrief(){
   const checks = points.map((p,i) =>
     `<li class="${p.key ? 'key' : ''}"><label><input type="checkbox" id="chk-${f.id}-${i}"><span>${esc(p.t)}${p.need ? '<span class="need">근거 확인 필요</span>' : ''}</span></label></li>`).join('');
   const AL = I.alert
-    ? `<div class="alert-box on"><b>공식 특보: ${I.alert.type} 발령 중 (${I.alert.since}~)</b><br>지금 가입해도 이번 피해는 보상 안 돼요 → 대응 요령 안내 + 다음 판매 기간 가입 권유</div>`
-    : `<div class="alert-box off"><b>공식 특보: 미발령</b> (10/22 06:00 기준)<br>특보 전이라 지금이 가입 상담 적기예요</div>`;
+    ? `<div class="alert-box on"><b>공식 특보: ${I.alert.type} 발령 중 (${I.alert.since}~)</b><br>지금 가입해도 이번 피해 보상 불가 → 대응 요령 안내 + 다음 판매 기간 가입 권유</div>`
+    : `<div class="alert-box off"><b>공식 특보: 미발령</b> (10/22 06:00 기준)<br>특보 전 · 가입 상담 적기</div>`;
   const gapXs = xs.filter(x => GAP.includes(x.ins));
   const resSel = gapXs.map(x => `<label>${esc(x.species)} 계약 결과
       <select data-res="${x.ci}"><option value="">아직 결정 안 함</option><option value="win" ${x.res==='win'?'selected':''}>가입 완료</option><option value="hold" ${x.res==='hold'?'selected':''}>보류 · 거절</option></select></label>`).join('');
@@ -1213,7 +1213,7 @@ function renderMockBrief(){
         ${I.top >= 2 ? `· ${I.d}일 뒤 ${I.t[I.d].toFixed(1)}℃ 예상` : `· 7일 ${MR.val} ${I.maxT.toFixed(1)}℃`}
         <span class="badge s${st}">${STAGE_ICON[st]} ${STAGE[st]}</span></div>
       <p class="note">${esc(sp.text)} · 2~3주 흐름 ${TREND[I.trend]} (참고)</p>
-      <p class="note">앱 자체 판정, 공식 특보는 수과원 발표를 따라요 · <button type="button" class="linkish" data-goto-fc="${f.region}">${esc(f.region)} 수온 예측 보기 →</button></p>
+      <p class="note">앱 자체 판정, 공식 특보는 수과원 발표 기준 · <button type="button" class="linkish" data-goto-fc="${f.region}">${esc(f.region)} 수온 예측 보기 →</button></p>
       ${AL}
       </div>
     </details>`, `
@@ -1239,7 +1239,7 @@ function renderMockBrief(){
         <label class="full">메모 <input id="r-memo" type="text" placeholder="예) 조피볼락 가입 의향, 참돔은 다음 달 결정"></label>
         <button type="button" class="btn pri full" data-act="save">결과 저장 · 다음 어가로</button>
       </div>
-      <p class="note" style="margin-top:6px">계약 결과는 어종마다 따로 남고, 가입 전환은 계약 수로 세요.</p>`)}
+      <p class="note" style="margin-top:6px">계약 결과는 어종별 기록 · 가입 전환은 계약 수 기준 집계</p>`)}
 
     ${helpAcc()}`, true);
   loadGov({key:'m' + f.id, region:f.region, species:f.items.map(x => x.species)});
@@ -1277,7 +1277,7 @@ async function loadGov(ctx){
   if(!sum || !box) return;
   if(g.state === 'err'){
     sum.textContent = '불러오지 못함';
-    box.innerHTML = `<p class="note">피해 지원 정보를 불러오지 못했습니다. 잠시 후 다시 열어 주십시오. 오류코드: ${esc(g.code)}</p>`;
+    box.innerHTML = `<p class="note">피해 지원 정보 조회 실패 · 잠시 후 다시 열기 필요 · 오류코드: ${esc(g.code)}</p>`;
     return;
   }
   const {ok, no} = govSplit(g);
@@ -1312,13 +1312,13 @@ function govCalc(){
       `<dt>보조 ${S.grant}% (국비·지방비)</dt><dd><b class="ok">${wonTxt(grant)}</b>${capped ? ` <span class="need">어가당 ${money(S.cap / 1e4)}만 원 한도</span>` : ''}</dd>`,
       `<dt>융자 ${S.loan}%</dt><dd>${wonTxt(loan)} <span class="note">(갚는 돈)</span></dd>`,
       `<dt>자부담</dt><dd>${wonTxt(self)}</dd>`);
-  } else rows.push('<dt>재해복구비</dt><dd class="note">폐사 마릿수를 넣으면 계산해요</dd>');
+  } else rows.push('<dt>재해복구비</dt><dd class="note">폐사 마릿수 입력 시 계산</dd>');
   if(rate >= 0 && !isNaN(rate)){
     const R = (g.dmg.relief || []).find(x => rate >= x.min_rate && rate < x.max_rate);
     rows.push(`<dt>정책자금 상환</dt><dd>${!R ? '<span class="note">기준 없음</span>' : R.years > 0
       ? `<b>${R.years}년 상환연기</b> · 이자 감면 ${esc(R.interest || '')}${R.apply_to ? ` · ${esc(R.apply_to)}` : ''}`
       : `<span class="note">${esc(R.note || '해당 없음')} (피해율 ${R.max_rate}% 미만)</span>`}</dd>`);
-  } else rows.push('<dt>정책자금 상환</dt><dd class="note">피해율을 넣으면 상환연기 기준을 보여 줘요</dd>');
+  } else rows.push('<dt>정책자금 상환</dt><dd class="note">피해율 입력 시 상환연기 기준 표시</dd>');
   out.innerHTML = rows.join('');
 }
 // 정부 사이트(*.go.kr · 정부24 gov.kr · 정책브리핑 korea.kr) 링크만. 기사·민간 사이트 링크는 보여 주지 않음
@@ -1348,9 +1348,9 @@ function govBody(g){
   const srcs = (D.sources || []).filter(x => govUrl(x.link));
   const srcBox = srcs.length ? `<details class="est"><summary>정부 자료 출처 ${srcs.length}개</summary><ul class="links" style="margin:6px 0 0 16px">${srcs.map(x => `<li>${govLink(x.link, x.name)} <span class="note">${esc(x.use || '')}</span></li>`).join('')}</ul></details>` : '';
   const items = (D.items || []).length ? `<p class="note" style="margin-top:6px">지원 품목: ${esc(D.items.join(', '))}${notice ? ` · 기준 ${notice}` : ''}</p>` : '';
-  if(!g.species.length) return `<p class="note">등록된 양식 어종이 없어 확인할 수 없어요.</p>${items}`;
+  if(!g.species.length) return `<p class="note">등록된 양식 어종 없음 · 확인 불가</p>${items}`;
   if(!ok.length) return `<p class="note" style="margin-top:4px"><span class="need" style="margin:0 4px 0 0">정부 지원 품목 아님</span>
-      ${esc(no.join(', '))}은(는) 정부 복구 단가 고시의 지원 품목 목록에 없어 재해복구비(재난지원금)를 계산할 수 없어요.</p>
+      ${esc(no.join(', '))}은(는) 정부 복구 단가 고시의 지원 품목 목록에 없어 재해복구비(재난지원금) 계산 불가</p>
     ${items}${srcBox}`;
   const spRows = g.species.map((sp, i) => {
     const list = D.prices[sp] || [];
@@ -1370,7 +1370,7 @@ function govBody(g){
       ${spRows}
       <div class="gov-calc"><label>피해율 (시·군 조사) <input id="gov-rate" type="number" min="0" max="100" inputmode="numeric" placeholder="입력"> %</label></div>
       <dl class="facts gov-out" id="gov-res"></dl>
-      <p class="note" style="margin-top:6px">복구비 = 폐사 마릿수 × 정부 복구 단가(${notice}) · 보조·융자·자부담 비율과 한도는 ${splitSrc} 기준이에요.</p>
+      <p class="note" style="margin-top:6px">복구비 = 폐사 마릿수 × 정부 복구 단가(${notice}) · 보조·융자·자부담 비율과 한도는 ${splitSrc} 기준</p>
     </div>
     ${top.length ? `<h4 style="margin-top:14px">고수온·저수온 피해 지원 제도</h4>
     <div class="gov-list">${top.map(govProgram).join('')}</div>` : ''}
@@ -1406,8 +1406,8 @@ const scriptOrig = {}, scriptEdits = {};
 function scriptBox(key, html){
   scriptOrig[key] = html;
   const edited = Object.hasOwn(scriptEdits, key);
-  return `<div class="script-h"><b>예시 멘트</b><span>눌러서 고쳐 쓸 수 있어요</span><span class="edited" data-script-flag ${edited ? '' : 'hidden'}>수정함</span></div>
-    <div class="script" contenteditable="true" spellcheck="false" role="textbox" aria-multiline="true" aria-label="예시 멘트 (고쳐 쓸 수 있어요)" data-script-key="${esc(key)}">${edited ? scriptEdits[key] : html}</div>
+  return `<div class="script-h"><b>예시 멘트</b><span>클릭하여 수정 가능</span><span class="edited" data-script-flag ${edited ? '' : 'hidden'}>수정함</span></div>
+    <div class="script" contenteditable="true" spellcheck="false" role="textbox" aria-multiline="true" aria-label="예시 멘트 (수정 가능)" data-script-key="${esc(key)}">${edited ? scriptEdits[key] : html}</div>
     <div class="script-tools">
       <button type="button" class="linkish" data-script-reset ${edited ? '' : 'disabled'}>↺ 원래 멘트로</button>
       <button type="button" class="linkish" data-script-copy>복사</button>
@@ -1458,7 +1458,7 @@ async function initApi(){
   const wantId = params.has('id') ? Number(params.get('id')) : null;
   if(params.has('id')){
     apiSel = Number.isSafeInteger(wantId) && wantId > 0 ? wantId : null;
-    if(apiSel == null) apiErr = '요청한 어가를 찾을 수 없어요.';
+    if(apiSel == null) apiErr = '요청한 어가 없음';
   }
   try{
     apiList = await apiGet('/api/households?limit=1000');
@@ -1469,7 +1469,7 @@ async function initApi(){
       apiSel = want ? wantId : null;
       if(apiSel == null){
         ++apiRequestId; apiData = null;
-        apiErr = '요청한 어가를 찾을 수 없어요.';
+        apiErr = '요청한 어가 없음';
       }
     }else if(!params.has('id') && !regionHouseholds().some(h => h.household_id === apiSel)) apiSel = regionHouseholds()[0]?.household_id ?? null;
     const current = apiList.find(h => h.household_id === apiSel);
@@ -1479,7 +1479,7 @@ async function initApi(){
     }
   }catch(e){
     apiOk = false;
-    const msg = `어가 목록을 불러오지 못했습니다. 잠시 후 새로고침해 주십시오. 오류코드: ${errCode(e)}`;
+    const msg = `어가 목록 조회 실패 · 잠시 후 새로고침 필요 · 오류코드: ${errCode(e)}`;
     if(!params.has('id')){ apiSel = null; apiData = null; apiErr = msg; }
     addNotice('⚠️ ' + msg);
   }finally{
@@ -1502,7 +1502,7 @@ async function loadApiDetail(id, force){
       apiData = data;
     }catch(e){
       if(requestId !== apiRequestId || apiSel !== id || detailMode !== 'api') return false;
-      apiErr = `어가 정보를 불러오지 못했습니다. 잠시 후 새로고침해 주십시오. 오류코드: ${errCode(e)}`;
+      apiErr = `어가 정보 조회 실패 · 잠시 후 새로고침 필요 · 오류코드: ${errCode(e)}`;
     }
     return true;
   })().finally(() => { if(apiPending === pending) apiPending = null; });
@@ -1514,12 +1514,12 @@ async function renderApiDetail(force){
     briefBoxes('<div class="loading">어가 목록을 불러오는 중…</div>', ''); return;
   }
   if(apiSel == null){
-    const message = apiErr || (apiOk && apiList.length && !regionHouseholds().length ? `${homeRegion} 지역 고객이 없어요. 위 '담당'에서 다른 지역을 골라 보세요.` : apiOk && !apiList.length ? '등록된 어가가 없어요.' : '어가를 고르면 통화 전 브리핑이 보여요.');
+    const message = apiErr || (apiOk && apiList.length && !regionHouseholds().length ? `${homeRegion} 지역 고객 없음 · 상단 '담당'에서 다른 지역 선택` : apiOk && !apiList.length ? '등록된 어가 없음' : '어가 선택 시 통화 전 브리핑 표시');
     briefBoxes(`<div class="empty">${esc(message)}</div>`, ''); return;
   }
   if(!await loadApiDetail(apiSel, force)) return;
   if(detailMode !== 'api') return;
-  if(apiErr || !apiData){ briefBoxes(`<div class="empty">${esc(apiErr || '어가 정보를 불러오지 못했습니다.')}</div>`, ''); return; }
+  if(apiErr || !apiData){ briefBoxes(`<div class="empty">${esc(apiErr || '어가 정보 조회 실패')}</div>`, ''); return; }
   const D = apiData, H = D.household, S = D.sea, cards = D.cards;
   const st = D.stage.level ?? 0, T = S.today, sg = S.stage;
   const nextContact = new Date(D.consult.next_contact_at || Date.now());
@@ -1535,8 +1535,8 @@ async function renderApiDetail(force){
   const peak = allFc.length ? allFc.reduce((a, b) => (MR.hot ? b.value > a.value : b.value < a.value) ? b : a) : null;
   const TREND_BIG = {up:'↗ 상승', flat:'→ 유지', down:'↘ 하강'};
   const AL = S.alert
-    ? `<div class="alert-box on"><b>공식 특보: ${esc(S.alert.type || '')} 발령 중${S.alert.since ? ` (${esc(S.alert.since)}~)` : ''}</b><br>지금 가입해도 이번 피해는 보상 안 돼요 → 대응 요령 안내 + 다음 판매 기간 가입 권유</div>`
-    : `<div class="alert-box off"><b>공식 특보: 미발령</b> (${esc(D.as_of)} 기준 · 수과원 발표로 확인)<br>특보 전이라 지금이 가입 상담 적기예요</div>`;
+    ? `<div class="alert-box on"><b>공식 특보: ${esc(S.alert.type || '')} 발령 중${S.alert.since ? ` (${esc(S.alert.since)}~)` : ''}</b><br>지금 가입해도 이번 피해 보상 불가 → 대응 요령 안내 + 다음 판매 기간 가입 권유</div>`
+    : `<div class="alert-box off"><b>공식 특보: 미발령</b> (${esc(D.as_of)} 기준 · 수과원 발표로 확인)<br>특보 전 · 가입 상담 적기</div>`;
 
   const gaps = cards.filter(c => API_GAP.includes(c.ins));
   const quoteCards = cards.filter(c => ['none','expired','norider'].includes(c.ins));
@@ -1548,7 +1548,7 @@ async function renderApiDetail(force){
 
     <div class="b-sec">
       <h3>계약별 보험 (어종별 · 급한 순) <span class="src-tag ${D.insurance_source === 'claim_api' ? 'live' : ''}">${D.insurance_source === 'claim_api' ? '보험금 계산 API' : 'DB 기본 정보'}</span></h3>
-      <div class="ctr-cards">${cards.length ? cards.map(apiCard).join('') : '<p class="note">등록된 양식 어종이 없어요.</p>'}</div>
+      <div class="ctr-cards">${cards.length ? cards.map(apiCard).join('') : '<p class="note">등록된 양식 어종 없음</p>'}</div>
       ${quoteCards.length ? `<div class="ctr-total"><span>보험 공백 ${quoteCards.length}건 합계 예상 부담</span><b id="c-total-mine">–</b></div>
       <p class="note">국비 50% · 경남도가 남은 몫의 70% 지원(2025년 기준)을 가정한 예시 · 수협 확인 필요</p>` : ''}
     </div>
@@ -1589,11 +1589,11 @@ async function renderApiDetail(force){
         <label class="full">메모 <input id="r-memo" type="text" placeholder="예) 조피볼락 가입 의향, 참돔은 다음 달 결정"></label>
         <button type="button" class="btn pri full" data-act="api-save">결과 저장</button>
       </div>
-      <p class="note" style="margin-top:6px">시즌(${esc(D.consult.season)}) 상담 상태와 상담 기록에 함께 저장돼요 · 어종별 결과는 따로 남아요.</p>`)}
+      <p class="note" style="margin-top:6px">시즌(${esc(D.consult.season)}) 상담 상태와 상담 기록에 함께 저장 · 어종별 결과 별도 기록</p>`)}
 
     ${acc('hist', '상담 기록', `${D.consult.logs.length}건${D.consult.next_contact_at ? ' · 상담일 ' + mdStr(D.consult.next_contact_at) : ''}`, D.consult.logs.length
       ? `<ul class="hist-list">${D.consult.logs.map(l => `<li><b>${esc(String(l.contacted_at).slice(0,16).replace('T',' '))}</b> · ${esc(l.channel)} · <b>${esc(l.result_status)}</b>${l.items.length ? ' · ' + l.items.map(i => esc(i.species) + ' ' + esc(i.result)).join(', ') : ''}${l.memo ? `<br>${esc(l.memo)}` : ''}${l.staff_name ? ` <span class="note">(${esc(l.staff_name)})</span>` : ''}</li>`).join('')}</ul>`
-      : '<p class="note">아직 상담 기록이 없어요.</p>')}
+      : '<p class="note">등록된 상담 기록 없음</p>')}
 
     ${helpAcc()}`);
   loadGov({key:'h' + H.household_id, region:H.sigungu || (apiList.find(h => h.household_id === H.household_id) || {}).region || homeRegion,
@@ -1663,7 +1663,7 @@ function apiCard(c, k){
   if(!ct && c.product){
     facts.push(`<dt>추천 상품</dt><dd>${esc(P.product_name)}${(c.alternatives || []).length ? ` <span class="note">(그 밖에 ${c.alternatives.map(a => esc(a.product_name)).join(', ')})</span>` : ''}</dd>`);
     facts.push(`<dt>판매기간</dt><dd><b>${esc(saleShort(P.sale_period, c.species))}</b> → <b class="${saleCls}">${esc(sale.text || '확인 필요')}</b>${moreText(P.sale_period)}</dd>`);
-    if(P.subsidy) facts.push(`<dt>보험료 지원</dt><dd>${/국가/.test(P.subsidy) ? '보험료 일부를 <b>국가가 보조</b>해요' : esc(P.subsidy)}${/국가/.test(P.subsidy) ? moreText(P.subsidy) : ''}</dd>`);
+    if(P.subsidy) facts.push(`<dt>보험료 지원</dt><dd>${/국가/.test(P.subsidy) ? '보험료 일부 <b>국가 보조</b>' : esc(P.subsidy)}${/국가/.test(P.subsidy) ? moreText(P.subsidy) : ''}</dd>`);
   }
   facts.push(`<dt>${MR.hot ? '한계 수온' : '기준 수온'}</dt><dd class="${c.risk.hit ? 'ng' : ''}">${esc(c.risk.text).replace(/\d+(?:\.\d+)?℃/g, '<b>$&</b>')}</dd>`);
   const rec = R.title ? `<div class="rec ${R.level}"><b>추천 · ${esc(R.title)}</b>${(R.actions || []).length ? `<ul>${R.actions.map(a => `<li>${esc(a)}</li>`).join('')}</ul>` : ''}</div>` : '';
@@ -1677,8 +1677,8 @@ function apiCard(c, k){
       <div class="scb-h">${MR.word} 피해 정도별 예상 보험금 <span class="src-tag">예시</span></div>
       <div class="scb-sub">${SC.amount ? `가입금액 ${eok(SC.amount)} 기준${SC.basis ? ` (${esc(String(SC.basis).replace(/\s*가입금액/, ''))})` : ''} · ` : ''}막대 전체 길이 = 손해액</div>
       ${scRows ? scBars(SC.rows, `${esc(pastAction(SC.action))} 받는 보험금`) : ''}
-      ${apiData && apiData.sea.alert ? `<p class="note ng">${esc(apiData.sea.alert.type || '특보')} 발령 중이라 지금 가입해도 이번 피해는 보상되지 않아요 · 다음 피해부터 적용</p>` : ''}
-      ${!scRows && !SC.error ? '<p class="note">비교할 가입금액 자료가 없어요</p>' : ''}${SC.error ? `<p class="note">${esc(SC.error)}</p>` : ''}
+      ${apiData && apiData.sea.alert ? `<p class="note ng">${esc(apiData.sea.alert.type || '특보')} 발령 중 · 지금 가입해도 이번 피해 보상 불가 · 다음 피해부터 적용</p>` : ''}
+      ${!scRows && !SC.error ? '<p class="note">비교할 가입금액 자료 없음</p>' : ''}${SC.error ? `<p class="note">${esc(SC.error)}</p>` : ''}
     </div>`;
   } else if(SC && SC.kind === 'uncovered'){
     const full = scRows ? SC.rows[SC.rows.length - 1] : null;
@@ -1719,22 +1719,22 @@ async function runEstimate(btn){
     if(!r.covered){ out.innerHTML = `<span class="ng">보상 대상 아님</span> · ${(r.not_covered_reasons || []).map(esc).join(' · ')}`; return; }
     const x = r.result;
     const zeroWhy = Number(x.payout) === 0 && Number(x.deductible) >= Number(x.calculated)
-      ? '<br><span class="ng">자기부담금이 손해액보다 커서 지급액이 0원이에요 (최저 자기부담 = 가입금액의 1~2%)</span>' : '';
+      ? '<br><span class="ng">자기부담금이 손해액보다 커 지급액 0원 (최저 자기부담 = 가입금액의 1~2%)</span>' : '';
     out.innerHTML = `<b>지급 예상 ${won(x.payout)}</b> · 손해액 ${won(x.loss)} · 자기부담 ${won(x.deductible)}${x.farmer_burden != null && Number(x.farmer_burden) !== Number(x.deductible) ? ` · 어가 부담 ${won(x.farmer_burden)}` : ''}${zeroWhy}
       <br><span class="note">${esc(r.rule ? r.rule.coverage_name : '')}${r.applied_price ? ` · 적용가격 ${won(r.applied_price.price)}/${r.applied_price.unit === 'KRW_PER_KG' ? 'kg' : '마리'}` : ''}${(r.warnings || []).length ? ' · ' + r.warnings.map(esc).join(' · ') : ''}</span>`;
   }catch(e){
     const b = e.body || {};
     const extra = b.price_variants ? ` (가격 구분: ${b.price_variants.map(esc).join(', ')})` : '';
-    out.innerHTML = `<span class="ng">보험금을 계산하지 못했습니다. 입력값을 확인하고 다시 눌러 주십시오. 오류코드: ${esc(errCode(e))}</span>${extra}`;
+    out.innerHTML = `<span class="ng">보험금 계산 실패 · 입력값 확인 후 재시도 필요 · 오류코드: ${esc(errCode(e))}</span>${extra}`;
   }
 }
 
 async function saveApiLog(){
-  if(!apiData || apiData.household.household_id !== apiSel){ toast('선택한 어가 정보를 다시 불러온 뒤 저장해 주세요.'); return; }
+  if(!apiData || apiData.household.household_id !== apiSel){ toast('선택 어가 정보 재조회 후 저장 필요'); return; }
   const householdId = apiSel, savedData = apiData;
   const status = document.getElementById('r-status').value;
   const nx = document.getElementById('r-next').value;   // datetime-local: 'YYYY-MM-DDTHH:MM' (초가 붙을 수도 있음)
-  if(status === '상담 예약' && !nx){ toast('상담 예약은 상담일을 넣어 주세요.'); document.getElementById('r-next').focus(); return; }
+  if(status === '상담 예약' && !nx){ toast('상담 예약 시 상담일 입력 필요'); document.getElementById('r-next').focus(); return; }
   // 시간대가 없는 값은 서버가 한국 시간(KST)으로 저장해요
   const body = {result_status:status, channel:'전화', memo:document.getElementById('r-memo').value.trim() || null,
                 staff_name:document.getElementById('r-staff').value.trim() || null,
@@ -1749,7 +1749,7 @@ async function saveApiLog(){
     toast(`${apiData.household.owner_name} 상담 결과 저장 · ${status}`);
     if(window.Shell) Shell.reloadNoti();   // 상담 예약·가입 완료는 알림에 바로 보여요
     renderApiDetail();
-  }catch(e){ toast(`저장하지 못했습니다. 잠시 후 다시 눌러 주십시오. 오류코드: ${errCode(e)}`); }
+  }catch(e){ toast(`저장 실패 · 잠시 후 재시도 필요 · 오류코드: ${errCode(e)}`); }
 }
 
 /* ===== 수온 예측 ===== */
@@ -1800,7 +1800,7 @@ function renderForecastSide(I){
   const p = pts[fcPick];
   document.getElementById('fc-pick').innerHTML = `<b>${mdw(p.i)} · 최고 ${p.max.toFixed(1)}℃</b> (평균 ${p.mean.toFixed(1)}℃ · 최저 ${p.min.toFixed(1)}℃)　<span class="note">${p.src==='ROMS'
     ? `ROMS 모델값 · 대응 검토 · ${STAGE[I.st[p.i]]}`
-    : 'ECMWF 지역별 보정값 · 흐름 참고만'}</span> · 그래프의 점을 누르면 날짜별 값이 보여요`;
+    : 'ECMWF 지역별 보정값 · 흐름 참고만'}</span> · 그래프 점 클릭 시 날짜별 값 표시`;
 
   const first = I.top >= 1 ? `${mdw(I.d)} (D-${I.d})` : '없음';
   document.getElementById('fc-summary').innerHTML = `
@@ -1977,7 +1977,7 @@ document.getElementById('bulk-sms').addEventListener('click', () => {
     sent++;
   });
   picked.clear(); save();
-  toast(`${sent}곳에 문자 발송 기록 · 실제 발송 안 함` + (skip ? ` · 수신 미동의 ${skip}곳은 빼고 전화 목록에 남겼어요` : ''));
+  toast(`${sent}곳에 문자 발송 기록 · 실제 발송 안 함` + (skip ? ` · 수신 미동의 ${skip}곳 발송 제외 · 전화 목록에 유지` : ''));
   renderKpis(); renderRows(); renderBrief();
 });
 /* ===== 알림 =====
@@ -2035,13 +2035,13 @@ detailEl.addEventListener('click', async e => {
     const k = sc.dataset.scriptKey;
     delete scriptEdits[k]; sc.innerHTML = scriptOrig[k]; scriptFlag(k);
     if(detailMode === 'api') updateApiCalc(); else { const f0 = farms.find(x => x.id === selected); if(f0) updateCalc(f0); }   // [예상 부담] 다시 채우기
-    toast('원래 멘트로 되돌렸어요'); return;
+    toast('기본 멘트로 복원 완료'); return;
   }
   if(e.target.closest('[data-script-copy]')){
     const sc = document.querySelector('#brief-side [data-script-key]'); if(!sc) return;
     const text = sc.innerText.trim();
     (navigator.clipboard ? navigator.clipboard.writeText(text) : Promise.reject())
-      .then(() => toast('멘트를 복사했어요'), () => toast('복사하지 못했어요 · 멘트를 직접 선택해 복사해 주세요'));
+      .then(() => toast('멘트 복사 완료'), () => toast('복사 실패 · 멘트 직접 선택 후 복사 필요'));
     return;
   }
   const a = e.target.closest('[data-act]'); if(!a) return;
@@ -2054,14 +2054,14 @@ detailEl.addEventListener('click', async e => {
   }
   if(a.dataset.act === 'call' && detailMode === 'api'){
     const H = apiData && apiData.household;
-    toast(`${H ? H.owner_name + (H.phone_masked ? ` (${H.phone_masked})` : '') : '어가'}에게 전화 연결 · 시연이라 실제로 걸리지 않아요`);
+    toast(`${H ? H.owner_name + (H.phone_masked ? ` (${H.phone_masked})` : '') : '어가'}에게 전화 연결 · 시연용 · 실제 전화 미연결`);
     openSecs.add('record'); document.getElementById('acc-record').open = true;
     document.getElementById('r-status').focus();
     return;
   }
   const f = farms.find(x => x.id === selected); if(!f) return;   // 가상 예시 어가
   if(a.dataset.act === 'call'){
-    toast(`${f.name} (${f.phone})에게 전화 연결 · 시연이라 실제로 걸리지 않아요`);
+    toast(`${f.name} (${f.phone})에게 전화 연결 · 시연용 · 실제 전화 미연결`);
     openSecs.add('record'); document.getElementById('acc-record').open = true;
     document.getElementById('r-status').focus();
   }
@@ -2069,9 +2069,9 @@ detailEl.addEventListener('click', async e => {
     const status = f.status === 'todo' || f.status === 'absent' ? 'sms' : f.status;
     a.disabled = true;
     try{ await recordLog(f, {status, channel:'문자', memo:TEMPLATES[tpl].label, next:f.next}); }
-    catch(err){ a.disabled = false; toast(`저장하지 못했습니다. 잠시 후 다시 눌러 주십시오. 오류코드: ${errCode(err)}`); return; }
+    catch(err){ a.disabled = false; toast(`저장 실패 · 잠시 후 재시도 필요 · 오류코드: ${errCode(err)}`); return; }
     f.status = status; save();
-    toast('테스트 문자를 보냈다고 기록했어요 · 실제 발송 안 함');
+    toast('테스트 문자 발송 기록 완료 · 실제 문자 미발송');
     renderBrief();
   }
   if(a.dataset.act === 'save'){
@@ -2094,7 +2094,7 @@ detailEl.addEventListener('click', async e => {
     f.hist.push({at:'2026-10-22', result:STATUS[f.status], text:[done.join(', '), next && `다음 ${next}`, memo].filter(Boolean).join(' · ') || '–'});
     save();
     const nextFarm = sorted().find(x => ACTIVE.includes(x.status) && x.id !== f.id);
-    toast(`${f.name} 결과 저장` + (mode === 'db' ? ' · DB에 기록했어요' : ' · 가상 데이터라 이 브라우저에만 기록했어요'));
+    toast(`${f.name} 결과 저장` + (mode === 'db' ? ' · DB 기록 완료' : ' · 가상 데이터 · 이 브라우저에만 기록'));
     if(nextFarm) select(nextFarm.id); else renderBrief();
   }
 });
@@ -2110,7 +2110,7 @@ consultEl.addEventListener('click', e => {
     const h = apiList.find(x => x.household_id === hid);
     if(h){ apiSel = hid; detailMode = 'api'; if(h.region !== homeRegion && hasOffice(h.region)) setOffice(h.region); showPage('detail'); return; }
     openDetail(o.dataset.open);
-    if(!listed().some(f => f.id === o.dataset.open)) toast('주의 단계가 아니라 연락 순서 목록에는 없지만 상세는 볼 수 있어요');
+    if(!listed().some(f => f.id === o.dataset.open)) toast('주의 단계 아님 · 연락 순서 목록 제외 · 상세 조회 가능');
     return; }
   if(e.target.closest('[data-hist-all]')){ histFarm = null; renderConsult(); return; }
   const tr = e.target.closest('tr[data-cust]');
