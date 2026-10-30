@@ -30,7 +30,7 @@
 .nav .cnt{margin-left:auto;font-size:12px;font-weight:700;color:#fff;background:var(--alert);border-radius:999px;padding:0 7px}
 /* 사이드바 맨 아래 '마지막 조회' (상단 바에서 옮겨 옴) — 사이드바 높이를 화면에 맞춰 맨 아래에 붙여요 */
 .side{height:calc(100vh - var(--header-height, 64px))}
-.side #updated.side-foot,.side-foot{margin-top:auto;padding:12px 12px 4px;font-size:12px;line-height:1.5;font-weight:400;color:rgba(255,255,255,.85);font-variant-numeric:tabular-nums}
+.side #updated.side-foot,.side-foot{margin-top:auto;padding:12px 12px 4px var(--side-foot-left, 32px);font-size:12px;line-height:1.5;font-weight:400;color:rgba(255,255,255,.85);font-variant-numeric:tabular-nums}
 
 /* 알림 종 */
 .bell-wrap{position:relative}
@@ -66,7 +66,7 @@
   .side{position:static;flex-direction:row;overflow-x:auto;padding:10px 16px 0}
   .nav[aria-current="page"]{box-shadow:inset 0 -3px 0 var(--accent)}
   .side{height:auto}
-  .side-foot{margin:0 0 0 auto;align-self:center;padding:0 4px;white-space:nowrap}
+  .side #updated.side-foot,.side-foot{margin:0 0 0 auto;align-self:center;padding:0 4px;white-space:nowrap}
 }
 @media (max-width:640px){ .top-in{padding:12px 16px} }
 
