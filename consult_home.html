@@ -274,8 +274,6 @@
   .msg-tabs{display:flex;gap:4px;padding:0 12px;border-bottom:1px solid var(--line)}
   .msg-tabs button{border:0;background:none;padding:10px 8px;font-weight:700;font-size:14px;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-1px;display:flex;align-items:center;gap:6px}
   .msg-tabs button[aria-selected="true"]{color:var(--accent);border-bottom-color:var(--accent)}
-  .rule-tag{font-size:11px;font-weight:700;color:var(--sub);background:#eef0f4;border-radius:3px;padding:0 6px}
-  .demo-box{display:flex;align-items:center;gap:6px;margin:12px 16px 0;padding:7px 10px;border-radius:6px;background:var(--warn-soft);border:1px solid #f3d3ad;color:#7a3d06;font-size:13px;font-weight:700}
   .msg-res{border-radius:6px;padding:8px 10px;font-size:13px;white-space:pre-line}
   .msg-res.ok{background:var(--normal-soft);color:var(--normal);border:1px solid #c3e2cd}
   .msg-res.ng{background:var(--alert-soft);color:var(--alert);border:1px solid #f5c2bd}
@@ -458,9 +456,8 @@
           <div class="list-h"><div class="sec-h" style="margin:0"><h3 id="h-bulk">안내 문자</h3></div></div>
           <div class="msg-tabs" role="tablist" aria-label="안내 문자 종류">
             <button type="button" role="tab" id="mt-bulk" data-mtab="bulk" aria-selected="true" aria-controls="mp-bulk">일괄 안내 문자</button>
-            <button type="button" role="tab" id="mt-personal" data-mtab="personal" aria-selected="false" aria-controls="mp-personal" tabindex="-1">개인화 안내 문자 <span class="rule-tag">규칙 기반</span></button>
+            <button type="button" role="tab" id="mt-personal" data-mtab="personal" aria-selected="false" aria-controls="mp-personal" tabindex="-1">개인화 안내 문자</button>
           </div>
-          <p class="demo-box"><svg class="msg-ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>시연용 · 실제 문자 미발송</p>
           <div class="panel-in bp" id="mp-bulk" role="tabpanel" aria-labelledby="mt-bulk">
             <div class="bp-count" id="bulk-n"></div>
             <div class="bp-picked" id="bulk-picked"></div>
