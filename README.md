@@ -47,7 +47,7 @@
 
 **⑥ 실행·테스트**
 - 백엔드: `backend/` 폴더에서 `..\.venv\Scripts\python.exe -m uvicorn backend.main:app --port 8000`
-- 테스트: `py backend/run_tests.py` (DB 없이), `py backend/run_tests.py --db` (임시 스키마), `node --test tests/` (화면 동작)
+- 테스트: `py backend/run_tests.py` (DB 없이), `py backend/run_tests.py --db` (임시 스키마), `node --test "tests/**/*.cjs"` (화면 동작)
 
 세부 규칙은 `.github/instructions/` 폴더에 주제별로 있습니다.
 
@@ -69,7 +69,7 @@
 - **접근성:** WCAG 2.2 AA 기준이고, 폭 320px에서도 가로 스크롤이 없어야 합니다.
 - **장식 기준:** 그라데이션, 유리 효과, 과한 그림자 같은 장식은 이유를 다섯 가지 질문으로 설명할 수 있을 때만 씁니다.
 - **저작권:** 아이콘·이미지·글꼴은 쓰기 전에 `docs/design/ASSET_LICENSES.md`에 라이선스를 기록합니다. 참고한 디자인은 베끼지 않고 `docs/design/REFERENCE_LOG.md`에 기록합니다.
-- **지금 쓰는 값(미승인):** 글꼴은 Noto Sans KR, 강조색은 `#1f5ae0`, 최대 폭은 420px입니다. 일관성을 위해 이 값을 쓰되, 확정은 승인 후 기록합니다.
+- **승인된 값 (2026-10-28):** 글꼴은 Noto Sans KR, 강조색은 `#007F98`(연한 색 `#E0F2F5`), 사이드바는 `#017896`, 모서리는 카드·버튼 6px·배지 3px입니다. 화면에는 `figma-theme.css`로 적용되어 있고, 전체 목록은 `DESIGN.md`의 승인 기록에 있습니다.
 
 ### 4. `LAN_SETUP.md`: 팀 공용 DB 접속
 
@@ -88,7 +88,7 @@
 
 배포는 **Render 하나로** 합니다. FastAPI 백엔드가 API와 화면 4개를 같이 내보냅니다. 예전 Streamlit 버전은 쓰지 않아 삭제했습니다. `main`에 PR이 merge되면 Render가 자동으로 다시 배포합니다. 보통 1~2분 걸립니다.
 
-Render가 쓰는 파일은 `backend/backend/` 폴더, 화면 HTML 4개, `out/` 폴더입니다. 이 파일들의 이름이나 위치를 바꾸면 배포 사이트가 깨집니다. 새 화면을 추가할 때는 `backend/backend/main.py`의 `SCREENS` 목록에도 넣어야 합니다.
+Render가 쓰는 파일은 `backend/backend/` 폴더, 화면 HTML 4개, 공용 파일(`shell.js`·`shell.css`·`figma-theme.css`·`suhyup-logo.png`), `out/` 폴더입니다. 이 파일들의 이름이나 위치를 바꾸면 배포 사이트가 깨집니다. 공용 파일이 없으면 상단 바와 사이드바가 그려지지 않습니다. 새 화면은 `backend/backend/main.py`의 `SCREENS`에, 새 공용 파일은 `SHARED`에 넣어야 합니다.
 
 ### 화면
 
@@ -98,6 +98,8 @@ Render가 쓰는 파일은 `backend/backend/` 폴더, 화면 HTML 4개, `out/` �
 | `farm_detail.html` | 어가 상세 | 어가별 정보, 상담 기록, 어가 지역의 수온 추이 |
 | `sea_forecast.html` | 수온 예측 | 지역별 21일 수온 예측 (1~7일 ROMS, 8~21일 ECMWF 보정), 어종별 위험 |
 | `consult_status.html` | 고객 상담 현황 | 고객 목록과 과거 상담 내역 |
+
+상단 바, 왼쪽 메뉴, 알림 패널은 따로 된 화면이 아니라 `shell.js`가 화면 4개에 공통으로 그립니다.
 
 화면 4개는 모두 FastAPI 백엔드(`backend/backend/main.py`)가 같이 내보냅니다. 화면이 데이터를 받지 못하면 가상 데이터(SAMPLE)를 쓰고 화면 위에 경고를 띄웁니다.
 
