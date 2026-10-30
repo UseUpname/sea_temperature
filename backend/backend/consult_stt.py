@@ -24,10 +24,40 @@ CATEGORIES = ["연락", "관심", "경험", "가족", "소통"]
 _client = None
 
 
+def load_env_files() -> None:
+    """Find OPENAI_API_KEY in .env files: the folder the server was started from (and its parents),
+    then this file's folder and its parents (backend/backend → backend → project root).
+    Values already set in the environment win. Uses python-dotenv when installed, else a minimal parser."""
+    here = Path(__file__).resolve()
+    folders = [Path.cwd(), *Path.cwd().parents, here.parent, *here.parents]
+    seen = set()
+    for folder in folders:
+        env = folder / ".env"
+        if env in seen or not env.is_file():
+            continue
+        seen.add(env)
+        try:
+            from dotenv import load_dotenv
+            load_dotenv(env, override=False)
+        except ImportError:
+            for line in env.read_text(encoding="utf-8-sig").splitlines():
+                line = line.strip()
+                if not line or line.startswith("#") or "=" not in line:
+                    continue
+                key, _, value = line.partition("=")
+                key = key.strip().removeprefix("export ").strip()
+                value = value.strip().strip('"').strip("'")
+                os.environ.setdefault(key, value)
+        if os.getenv("OPENAI_API_KEY"):
+            return
+
+
 def client():
     """Imported on first use, so the API server still starts when the openai package is missing."""
     global _client
     if _client is None:
+        if not os.getenv("OPENAI_API_KEY"):
+            load_env_files()
         from openai import OpenAI   # pip install openai
         _client = OpenAI()          # reads OPENAI_API_KEY
     return _client
@@ -40,12 +70,20 @@ def fmt_ts(sec: float) -> str:
 
 def transcribe(path: Path) -> list[dict]:
     """Speaker-labelled segments: [{speaker, start, end, text}]."""
-    with open(path, "rb") as f:
-        tr = client().audio.transcriptions.create(
-            model=STT_MODEL, file=f, response_format="diarized_json",
-            chunking_strategy="auto",   # required for audio longer than 30 seconds
-            language="ko",
-        )
+    def call(**extra):
+        with open(path, "rb") as f:
+            return client().audio.transcriptions.create(
+                model=STT_MODEL, file=f, response_format="diarized_json",
+                chunking_strategy="auto",   # required for audio longer than 30 seconds
+                **extra)
+    try:
+        tr = call(language="ko")
+    except Exception as exc:
+        # 모델이 language 옵션을 받지 않으면(400) 언어 자동 감지로 한 번 더
+        if getattr(exc, "status_code", None) == 400 and "language" in str(exc).lower():
+            tr = call()
+        else:
+            raise
     return [{"speaker": s.speaker, "start": float(s.start), "end": float(s.end), "text": s.text.strip()}
             for s in tr.segments if s.text and s.text.strip()]
 
