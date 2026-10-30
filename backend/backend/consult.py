@@ -9,8 +9,8 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path as FilePath
 from typing import Annotated, Literal
 
-from fastapi import APIRouter, Depends, File, HTTPException, Path, Query, UploadFile
-from fastapi.responses import FileResponse
+from fastapi import APIRouter, Depends, File, HTTPException, Path, Query, Request, UploadFile
+from fastapi.responses import Response
 from psycopg import Connection
 from pydantic import BaseModel, Field, model_validator
 
@@ -108,7 +108,7 @@ def list_history(db: Connection, household_id: int | None = None) -> list[dict]:
         SELECT l.log_id, l.household_id, h.owner_name AS name, {REGION_SHORT} AS region, l.channel, l.staff_name,
                (l.contacted_at AT TIME ZONE 'Asia/Seoul')::date AS date,
                to_char(l.contacted_at AT TIME ZONE 'Asia/Seoul', 'HH24:MI') AS time, l.result_status, l.memo,
-               cr.stt_status, cr.duration_sec,
+               cr.stt_status, cr.duration_sec, cr.error AS stt_error,
                ARRAY(SELECT s.standard_name FROM customer_service.household_species m
                      JOIN customer_service.fish_species s ON s.species_id = m.species_id
                      WHERE m.household_id = l.household_id ORDER BY m.is_primary DESC, m.mapping_id) AS species
@@ -124,6 +124,7 @@ def list_history(db: Connection, household_id: int | None = None) -> list[dict]:
              "time": r["time"], "channel": r["channel"], "staff_name": r["staff_name"],
              # 통화 기록: has_stt 가 true 면 화면에 '통화 기록 보기' 버튼 (stt_status: 대기 · 변환 중 · 완료 · 실패 · null=녹음 없음)
              "stt_status": r["stt_status"], "has_stt": r["stt_status"] == "완료",
+             "stt_error": r["stt_error"] if r["stt_status"] == "실패" else None,
              "stt_dur": consult_stt.fmt_ts(r["duration_sec"]) if r["duration_sec"] is not None else None}
             for r in rows]
 
@@ -205,6 +206,16 @@ def delete_consultation(db: Connection, log_id: int) -> dict:
 
 # ===== 통화 녹음 · STT =====
 
+def audio_file(stored: str) -> FilePath | None:
+    """Stored path → existing file. Older rows hold a path relative to the folder the server was started in,
+    so also look next to CONSULT_AUDIO_DIR."""
+    p = FilePath(stored)
+    for cand in (p, consult_stt.AUDIO_DIR / p.name, consult_stt.AUDIO_DIR.resolve() / p.name):
+        if cand.is_file():
+            return cand.resolve()
+    return None
+
+
 def get_log(db: Connection, log_id: int) -> dict:
     log = db.execute("""
         SELECT log_id, household_id, channel, staff_name FROM customer_service.consult_logs WHERE log_id = %s
@@ -222,6 +233,7 @@ def run_stt(db: Connection, log_id: int, audio_path: FilePath, mime: str | None)
         status, error = "완료", None
     except Exception as exc:   # OpenAI/network/file errors
         r, status, error = {}, "실패", f"{type(exc).__name__}: {exc}"[:500]
+        print(f"[STT 실패] log_id={log_id} {error}")   # 백엔드 창에서도 바로 보이게
     db.execute("""
         INSERT INTO customer_service.consult_call_records
             (log_id, audio_path, audio_mime, duration_sec, stt_status, stt_model, summary_model,
@@ -394,7 +406,7 @@ def upload_recording(log_id: Annotated[int, Path(gt=0)], db: WriteDB, file: Uplo
     if not data:
         raise HTTPException(422, "빈 파일입니다.")
     consult_stt.AUDIO_DIR.mkdir(parents=True, exist_ok=True)
-    path = consult_stt.AUDIO_DIR / f"{log_id}{ext}"
+    path = (consult_stt.AUDIO_DIR / f"{log_id}{ext}").resolve()   # 절대 경로로 저장 (서버를 켠 폴더가 달라도 찾도록)
     for old in consult_stt.AUDIO_DIR.glob(f"{log_id}.*"):   # 다시 올리면 이전 녹음은 지워요
         old.unlink(missing_ok=True)
     path.write_bytes(data)
@@ -406,9 +418,10 @@ def retry_stt(log_id: Annotated[int, Path(gt=0)], db: WriteDB):
     """저장된 녹음으로 STT를 다시 돌려요 ('실패'였을 때)."""
     rec = db.execute("SELECT audio_path, audio_mime FROM customer_service.consult_call_records WHERE log_id = %s",
                      (log_id,)).fetchone()
-    if rec is None or not FilePath(rec["audio_path"]).is_file():
+    path = audio_file(rec["audio_path"]) if rec else None
+    if path is None:
         raise HTTPException(404, "다시 변환할 녹음 파일이 없어요. 녹음을 다시 올려 주세요.")
-    return run_stt(db, log_id, FilePath(rec["audio_path"]), rec["audio_mime"])
+    return run_stt(db, log_id, path, rec["audio_mime"])
 
 
 @router.get("/logs/{log_id}/stt")
@@ -421,12 +434,36 @@ def stt(log_id: Annotated[int, Path(gt=0)], db: ReadDB):
 
 
 @router.get("/logs/{log_id}/audio")
-def audio(log_id: Annotated[int, Path(gt=0)], db: ReadDB):
+def audio(log_id: Annotated[int, Path(gt=0)], request: Request, db: ReadDB):
+    """녹음 파일. 브라우저가 중간부터 달라고 하면(Range) 그 부분만 보내요 → 재생 막대·줄 클릭으로 이동 가능."""
     rec = db.execute("SELECT audio_path, audio_mime FROM customer_service.consult_call_records WHERE log_id = %s",
                      (log_id,)).fetchone()
-    if rec is None or not FilePath(rec["audio_path"]).is_file():
+    path = audio_file(rec["audio_path"]) if rec else None
+    if path is None:
         raise HTTPException(404, "녹음 파일이 없어요.")
-    return FileResponse(rec["audio_path"], media_type=rec["audio_mime"] or None)
+    size = path.stat().st_size
+    headers = {"Accept-Ranges": "bytes", "Cache-Control": "private, max-age=300"}
+    media = rec["audio_mime"] or "audio/mpeg"
+    rng = request.headers.get("range", "")
+    if rng.startswith("bytes="):
+        first = rng[6:].split(",")[0].strip()
+        start_s, _, end_s = first.partition("-")
+        try:
+            if start_s:
+                start, end = int(start_s), int(end_s) if end_s else size - 1
+            else:                                   # bytes=-500 : 마지막 500바이트
+                start, end = max(0, size - int(end_s)), size - 1
+        except ValueError:
+            start, end = 0, size - 1
+        end = min(end, size - 1)
+        if start > end or start >= size:
+            return Response(status_code=416, headers={"Content-Range": f"bytes */{size}"})
+        with open(path, "rb") as f:
+            f.seek(start)
+            chunk = f.read(end - start + 1)
+        return Response(chunk, status_code=206, media_type=media,
+                        headers={**headers, "Content-Range": f"bytes {start}-{end}/{size}"})
+    return Response(path.read_bytes(), media_type=media, headers=headers)
 
 
 # ----- 고객 참고사항 -----
