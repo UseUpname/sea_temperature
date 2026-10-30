@@ -95,9 +95,9 @@ Render가 쓰는 파일은 `backend/backend/` 폴더, 화면 HTML 4개, 공용 �
 | 파일 | 화면 | 내용 |
 |---|---|---|
 | `consult_home.html` | 상담 홈 | 오늘 연락할 어가, 지역 수온, 신청·주의 추이 |
+| `consult_status.html` | 고객 상담 현황 | 고객 목록과 과거 상담 내역 |
 | `farm_detail.html` | 어가 상세 | 어가별 정보, 상담 기록, 어가 지역의 수온 추이 |
 | `sea_forecast.html` | 수온 예측 | 지역별 21일 수온 예측 (1~7일 ROMS, 8~21일 ECMWF 보정), 어종별 위험 |
-| `consult_status.html` | 고객 상담 현황 | 고객 목록과 과거 상담 내역 |
 
 상단 바, 왼쪽 메뉴, 알림 패널은 따로 된 화면이 아니라 `shell.js`가 화면 4개에 공통으로 그립니다.
 

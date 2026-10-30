@@ -49,7 +49,7 @@
       ['경보 시 먹이 주기 중단 · 선별·분조 금지 (약관상 의무)', '저수온 특보 시 먹이량 조절 · 선별·이동 자제 (약관 의무는 수협 확인)'],
       ['경보가 나면 먹이 주기 중단, 선별·분조 금지 (약관상 의무)', '저수온 특보가 나면 먹이량 조절, 선별·이동 자제 (약관 의무는 수협 확인)'],
       ['산소 공급 장비를 점검하고', '사육 밀도와 월동 대비를 점검하고'], ['액화산소 등 대응 장비 점검 안내', '월동 대비(사육밀도·먹이량 조절) 안내'],
-      ['경보 때 지켜야 할 의무를 안내하고', '저수온 때 지켜야 할 대응을 안내하고'],
+      ['경보 때 지켜야 할 의무를 안내하고', '저수온 때 지켜야 할 대응을 안내하고'], ['경보 시 준수 의무 안내', '저수온 시 대응 요령 안내'],
     ];
     const pick = () => {
       try{
@@ -196,7 +196,7 @@
         </button>
         <div class="bell-panel" id="bell-panel" hidden>
           <div class="bell-h"><span>알림</span><button type="button" class="linkish" id="bell-read" disabled>모두 읽음</button></div>
-          <ul class="bell-list" id="bell-list"><li class="empty">불러오는 중이에요…</li></ul>
+          <ul class="bell-list" id="bell-list"><li class="empty">조회 중…</li></ul>
         </div>
       </div>
     </div>
@@ -212,7 +212,7 @@
   document.title = SM.text(document.title);
   if(!SM.M.hot) document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.foot-rule').forEach(el => {
-      el.textContent = '위험 단계는 저수온 앱 기준(관심 7℃ · 주의 4℃ · 경보 4℃ 이하 3일, 일최저 수온 · 수과원 저수온 특보 기준)으로 판정한 참고값이며,';
+      el.textContent = '위험 단계는 저수온 앱 기준(관심 7℃ · 주의 4℃ · 경보 4℃ 이하 3일, 일최저 수온 · 수과원 저수온 특보 기준)으로 판정한 참고값 ·';
     });
   });
   const logo = header.querySelector('.logo');
@@ -366,11 +366,11 @@
     $('bell').setAttribute('aria-label', un ? `알림 ${un}개 안 읽음` : '알림 (모두 읽음)');
     const btn = $('bell-read');
     btn.disabled = !un;
-    btn.title = un ? '알림을 모두 읽음으로 표시' : '모두 읽었어요';
+    btn.title = un ? '알림을 모두 읽음으로 표시' : '모두 읽음';
     $('bell-list').innerHTML = noti.length
       ? noti.map(n => `<li class="${n.read ? 'read' : 'unread'}">
           <button type="button" data-noti="${esc(n.id)}"><span class="ty ${esc(n.ty)}">${esc(n.lbl)}</span><span>${esc(n.text)}</span><small>${esc(n.at)}${n.read ? '' : ' · 안 읽음'}</small></button></li>`).join('')
-      : `<li class="empty">${loadErr ? `알림을 불러오지 못했어요 (${esc(loadErr)})` : '새 알림이 없어요'}</li>`;
+      : `<li class="empty">${loadErr ? `알림 조회 실패 (${esc(loadErr)})` : '새 알림 없음'}</li>`;
   }
 
   async function loadNoti(){
@@ -444,7 +444,7 @@
     try{
       const r = await fetch(`${API_BASE}/api/dashboard/schedule?month=${key}`);
       if(r.ok) entry.items = await r.json();
-      else{ entry.items = []; entry.err = r.status === 404 ? '일정 API가 아직 서버에 없어요 (dashboard.py 배포 확인)' : `일정을 불러오지 못했어요 (HTTP ${r.status})`; }
+      else{ entry.items = []; entry.err = r.status === 404 ? '일정 API 서버 미배포 (dashboard.py 배포 확인 필요)' : `일정 조회 실패 (HTTP ${r.status})`; }
     }catch(e){
       entry.items = sampleSchedule(y, m);   // 서버에 닿지 못함 = 가상 데이터 시연
     }
@@ -486,9 +486,9 @@
     const sd = new Date(calSel + 'T00:00:00'), list = byDay[calSel] || [];
     const head = `<div class="cal-day-h">${sd.getMonth() + 1}월 ${sd.getDate()}일 (${WEEK[sd.getDay()]})${calSel === today ? ' · 오늘' : ''}<span>${list.length ? list.length + '건' : ''}</span></div>`;
     let body;
-    if(!entry || !entry.items) body = '<p class="cal-empty">불러오는 중이에요…</p>';
+    if(!entry || !entry.items) body = '<p class="cal-empty">조회 중…</p>';
     else if(entry.err) body = `<p class="cal-empty err">${esc(entry.err)}</p>`;
-    else if(!list.length) body = '<p class="cal-empty">이 날은 일정이 없어요</p>';
+    else if(!list.length) body = '<p class="cal-empty">해당 날짜 일정 없음</p>';
     else body = '<ul class="cal-list">' + list.map(it => `<li><button type="button" class="cal-ev${calSel < today ? ' past' : ''}" data-cal-cust="${esc(it.household_id)}" data-cal-region="${esc(it.region || '')}">
         <b class="tm">${esc(it.time)}</b>
         <span class="who">${esc(it.label)}</span>
